@@ -273,8 +273,8 @@ namespace BattleshipsSolution3._0.Classes
                         {
                             Grid shipLengthGrid = new Grid();
                             try
-                            { 
-                            shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (10 * i)) as Grid;
+                            {
+                                shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (10 * i)) as Grid;
                             }
                             catch
                             {
@@ -350,7 +350,17 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
-                            var shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (10 * i)) as Grid;
+                            Grid shipLengthGrid = new Grid();
+                            try
+                            {
+                                shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (10 * i)) as Grid;
+                            }
+                            catch
+                            {
+                                ValidateShipPlacement(ship);
+                                placementValid = false;
+                                break;
+                            }
                             if (shipLengthGrid.Tag.ToString() != "Water" || shipLengthGrid == null)
                             {
                                 ValidateShipPlacement(ship);
@@ -379,7 +389,17 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
-                            var shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (1 * i)) as Grid;
+                            Grid shipLengthGrid = new Grid();
+                            try
+                            {
+                                shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (1 * i)) as Grid;
+                            }
+                            catch
+                            {
+                                ValidateShipPlacement(ship);
+                                placementValid = false;
+                                break;
+                            }
                             if (gridVar != shipLengthGrid && shipStartIndex - (1 * i) % 10 != 0 && (shipLengthGrid.Tag.ToString() != "Water" || shipLengthGrid.Name == null))
                             {
                                 ValidateShipPlacement(ship);
