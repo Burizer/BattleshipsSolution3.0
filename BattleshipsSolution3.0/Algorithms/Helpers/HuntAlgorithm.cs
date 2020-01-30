@@ -13,7 +13,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
     public class HuntAlgorithm
     {
         private Random _random = new Random();
-        private List<int> _hitList = new List<int>();
+        private List<int> _hitList;
         private Grid _gameGrid;
         public HuntAlgorithm(List<int> hitList, Grid gameGrid)
         {
@@ -66,7 +66,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     {
                         potentialHits.Add(4);
                     }
-                    int direction = potentialHits[_random.Next(potentialHits.Count - 1)];
+                    int direction = potentialHits[_random.Next(potentialHits.Count)];
                     switch (direction)
                     {
                         case 1:

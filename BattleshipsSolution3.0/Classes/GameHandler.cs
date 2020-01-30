@@ -26,10 +26,10 @@ namespace BattleshipsSolution3._0.Classes
         private List<int> _totalShots = new List<int>();
         private List<Tuple<int, string>> _hitCoordinateAndType;
         private string _algorithmName = "";
-        private int _shotsAverage;
-        private int _shotsMinimum;
-        private int _shotsMaximum;
-        private string _timeElapsed;
+        private int _shotsAverage = 0;
+        private int _shotsMinimum = 0;
+        private int _shotsMaximum = 0;
+        private string _timeElapsed = "";
         private TextBlock _algorithmNameBlock;
         private TextBlock _shotsAverageBlock;
         private TextBlock _shotsMinimumBlock;
@@ -147,14 +147,11 @@ namespace BattleshipsSolution3._0.Classes
                     Grid newGrid = new Grid();
                     newGrid.SetValue(Grid.RowProperty, y);
                     newGrid.SetValue(Grid.ColumnProperty, x);
+                    newGrid.Width = 30;
+                    newGrid.Height = 30;
+                    newGrid.MouseDown += GameGrid_MouseDown;
                     _gameGrid.Children.Add(newGrid);
                 }
-            }
-            foreach (Grid item in _gameGrid.Children)
-            {
-                item.Width = 30;
-                item.Height = 30;
-                item.MouseDown += GameGrid_MouseDown;
             }
         }
         private void SetScoreBoardControls()
