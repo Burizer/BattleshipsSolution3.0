@@ -29,22 +29,23 @@ namespace BattleshipsSolution3._0.Algorithms
             {
                 if (_hitList.Count != 0)
                 {
+                    _hunt.GameGrid = _gameGrid;
+                    _hunt.HitList = _hitList;
                     return _hunt.Coordinate;
                 }
                 else
                 {
-                    _counter += 2;
-                    if (_counter % 20 < 11 || _counter % 20 == 0)
-                    {
-                        return _counter - 1;
-                    }
-                    else
-                    {
-                        return _counter - 2;
-                    }
+                _counter += 2;
+                if (_counter % 20 < 11 || _counter % 20 == 0)
+                {
+                    return _counter - 1;
+                }
+                else
+                {
+                    return _counter - 2;
                 }
             }
-        }
+        }}
 
         public Grid GameGrid
         {

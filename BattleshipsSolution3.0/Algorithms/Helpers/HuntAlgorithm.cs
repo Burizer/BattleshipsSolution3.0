@@ -46,99 +46,162 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                 if (_hitList.Count == 1)
                 {
                     List<int> potentialHits = new List<int>();
-                    var targetGridNorth = _gameGrid.Children[_hitList[0] - 10] as Grid;
-                    var targetGridEast = _gameGrid.Children[_hitList[0] + 1] as Grid;
-                    var targetGridSouth = _gameGrid.Children[_hitList[0] + 10] as Grid;
-                    var targetGridWest = _gameGrid.Children[_hitList[0] - 1] as Grid;
-                    if (targetGridNorth.Tag.ToString() == "Water" && targetGridNorth != null)
+                    Grid targetGridNorth = new Grid();
+                    targetGridNorth.Tag = "";
+                    Grid targetGridEast = new Grid();
+                    targetGridEast.Tag = "";
+                    Grid targetGridSouth = new Grid();
+                    targetGridSouth.Tag = "";
+                    Grid targetGridWest = new Grid();
+                    targetGridWest.Tag = "";
+                    try
+                    {
+                        targetGridNorth = _gameGrid.Children[_hitList[0] - 10] as Grid;
+                    }
+                    catch { }
+                    try
+                    {
+                        targetGridEast = _gameGrid.Children[_hitList[0] + 1] as Grid;
+                    }
+                    catch { }
+                    try
+                    {
+                        targetGridSouth = _gameGrid.Children[_hitList[0] + 10] as Grid;
+                    }
+                    catch { }
+                    try
+                    {
+                        targetGridWest = _gameGrid.Children[_hitList[0] - 1] as Grid;
+                    }
+                    catch { }
+                    if (targetGridNorth.Tag.ToString() == "Water")
                     {
                         potentialHits.Add(1);
                     }
-                    if (targetGridEast.Tag.ToString() == "Water" && targetGridEast != null)
+                    if (targetGridEast.Tag.ToString() == "Water")
                     {
                         potentialHits.Add(2);
                     }
-                    if (targetGridSouth.Tag.ToString() == "Water" && targetGridSouth != null)
+                    if (targetGridSouth.Tag.ToString() == "Water")
                     {
                         potentialHits.Add(3);
                     }
-                    if (targetGridWest.Tag.ToString() == "Water" && targetGridWest != null)
+                    if (targetGridWest.Tag.ToString() == "Water")
                     {
                         potentialHits.Add(4);
                     }
-                    int direction = potentialHits[_random.Next(potentialHits.Count)];
-                    switch (direction)
+                    if (potentialHits.Count != 0)
                     {
-                        case 1:
-                            return _hitList[0] - 10;
-                        case 2:
-                            return _hitList[0] + 1;
-                        case 3:
-                            return _hitList[0] + 10;
-                        case 4:
-                            return _hitList[0] - 1;
+                        int direction = potentialHits[_random.Next(potentialHits.Count)];
+                        switch (direction)
+                        {
+                            case 1:
+                                return _hitList[0] - 10;
+                            case 2:
+                                return _hitList[0] + 1;
+                            case 3:
+                                return _hitList[0] + 10;
+                            case 4:
+                                return _hitList[0] - 1;
+                        }
+                    }
+                }
+                bool isHorizontal = false;
+                try
+                {
+                    isHorizontal = (_hitList[0] % 10 == _hitList[1] % 10);
+                }
+                catch { }
+                if (isHorizontal)
+                {
+                    Grid targetGridNorth = new Grid();
+                    Grid targetGridSouth = new Grid();
+                    try
+                    {
+                        targetGridNorth = _gameGrid.Children[_hitList[0] + 10] as Grid;
+                    }
+                    catch { }
+                    try
+                    {
+                        targetGridSouth = _gameGrid.Children[_hitList[_hitList.Count - 1] - 10] as Grid;
+                    }
+                    catch { }
+                    if (targetGridNorth.Tag.ToString() != "Water" && targetGridSouth.Tag.ToString() != "Water")
+                    {
+                        foreach (var item in _hitList)
+                        {
+                            var targetGridEast = _gameGrid.Children[item + 1] as Grid;
+                            var targetGridWest = _gameGrid.Children[item - 1] as Grid;
+                            if (targetGridEast.Tag.ToString() == "Water")
+                            {
+                                return item + 1;
+                            }
+                            else if (targetGridWest.Tag.ToString() == "Water")
+                            {
+                                return item - 1;
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    if (_hitList[0] % 10 == _hitList[1] % 10)
+                    Grid targetGridEast = new Grid();
+                    Grid targetGridWest = new Grid();
+                    targetGridEast.Tag = "";
+                    targetGridWest.Tag = "";
+                    try
                     {
-                        var targetGridNorth = _gameGrid.Children[_hitList[0] + 10] as Grid;
-                        var targetGridSouth = _gameGrid.Children[_hitList[_hitList.Count - 1] - 10] as Grid;
-                        if (targetGridNorth.Tag.ToString() != "Water" && targetGridSouth.Tag.ToString() != "Water")
+                        targetGridEast = _gameGrid.Children[_hitList[_hitList.Count - 1] + 1] as Grid;
+                    }
+                    catch { }
+                    try
+                    {
+                        targetGridWest = _gameGrid.Children[_hitList[0] - 1] as Grid;
+                    }
+                    catch { }
+                    if (targetGridWest.Tag.ToString() != "Water" && targetGridEast.Tag.ToString() != "Water")
+                    {
+                        foreach (var item in _hitList)
                         {
-                            foreach (var item in _hitList)
+                            Grid targetGridNorth = new Grid();
+                            Grid targetGridSouth = new Grid();
+                            targetGridNorth.Tag = "";
+                            targetGridSouth.Tag = "";
+                            try { 
+                            targetGridNorth = _gameGrid.Children[item + 10] as Grid;
+                            }
+                            catch { }
+                            
+                            try { 
+                            targetGridSouth = _gameGrid.Children[item - 10] as Grid;
+                            }
+                            catch { }
+                            if (targetGridNorth.Tag.ToString() == "Water")
                             {
-                                var targetGridEast = _gameGrid.Children[item + 1] as Grid;
-                                var targetGridWest = _gameGrid.Children[item - 1] as Grid;
-                                if (targetGridEast.Tag.ToString() == "Water")
-                                {
-                                    return item + 1;
-                                }
-                                else if (targetGridWest.Tag.ToString() == "Water")
-                                {
-                                    return item - 1;
-                                }
+                                return item + 10;
+                            }
+                            if (targetGridSouth.Tag.ToString() == "Water")
+                            {
+                                return item - 10;
                             }
                         }
                     }
-                    else if (_hitList[1] - _hitList[0] == 1)
-                    {
-                        var targetGridEast = _gameGrid.Children[_hitList[_hitList.Count - 1] + 1] as Grid;
-                        var targetGridWest = _gameGrid.Children[_hitList[0] - 1] as Grid;
-                        if (targetGridWest.Tag.ToString() != "Water" && targetGridEast.Tag.ToString() != "Water")
-                        {
-                            foreach (var item in _hitList)
-                            {
-                                var targetGridNorth = _gameGrid.Children[item + 10] as Grid;
-                                var targetGridSouth = _gameGrid.Children[item - 10] as Grid;
-                                if (targetGridNorth.Tag.ToString() == "Water")
-                                {
-                                    return item + 10;
-                                }
-                                if (targetGridSouth.Tag.ToString() == "Water")
-                                {
-                                    return item - 10;
-                                }
-                            }
-                        }
-                    }
-                    if (_hitList[_hitList.Count - 1] == _hitList[_hitList.Count - 2] - 10 && _gameGrid.Children[(_hitList.Count - 1) - 10] != null)
-                    {
-                        return _hitList[_hitList.Count - 1] - 10;
-                    }
-                    if (_hitList[_hitList.Count - 1] == _hitList[_hitList.Count - 2] + 1 && _gameGrid.Children[(_hitList.Count - 1) + 1] != null)
-                    {
-                        return _hitList[_hitList.Count - 1] + 1;
-                    }
-                    if (_hitList[_hitList.Count - 1] == _hitList[_hitList.Count - 2] + 10 && _gameGrid.Children[(_hitList.Count - 1) + 10] != null)
-                    {
-                        return _hitList[_hitList.Count - 1] + 10;
-                    }
-                    if (_hitList[_hitList.Count - 1] == _hitList[_hitList.Count - 2] - 1 && _gameGrid.Children[(_hitList.Count - 1) - 1] != null)
-                    {
-                        return _hitList[_hitList.Count - 1] - 1;
-                    }
+                }
+                if (_hitList[_hitList.Count - 1] == _hitList[_hitList.Count - 2] - 10 && _gameGrid.Children[(_hitList.Count - 1) - 10] != null)
+                {
+                    return _hitList[_hitList.Count - 1] - 10;
+                }
+                if (_hitList[_hitList.Count - 1] == _hitList[_hitList.Count - 2] + 1 && _gameGrid.Children[(_hitList.Count - 1) + 1] != null)
+                {
+                    return _hitList[_hitList.Count - 1] + 1;
+                }
+                if (_hitList[_hitList.Count - 1] == _hitList[_hitList.Count - 2] + 10 && _gameGrid.Children[(_hitList.Count - 1) + 10] != null)
+                {
+                    return _hitList[_hitList.Count - 1] + 10;
+                }
+                if (_hitList[_hitList.Count - 1] == _hitList[_hitList.Count - 2] - 1 && _gameGrid.Children[(_hitList.Count - 1) - 1] != null)
+                {
+                    return _hitList[_hitList.Count - 1] - 1;
                 }
                 return -1;
             }

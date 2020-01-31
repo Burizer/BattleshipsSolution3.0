@@ -15,7 +15,7 @@ namespace BattleshipsSolution3._0.Algorithms
     {
         private Grid _gameGrid;
         private List<int> _hitList = new List<int>();
-        private static Random _random;
+        private static Random _random = new Random();
         private HuntAlgorithm _hunt;
         public HuntAndTargetAlgorithm(Grid gameGrid)
         {

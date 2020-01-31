@@ -10,8 +10,8 @@ namespace BattleshipsSolution3._0.Interfaces
 {
     public interface IBaseAI
     {
-        int Coordinate { get;}
+        int Coordinate { get; }
         List<int> HitList { get; set; }
-        Grid GameGrid { get; }
+        Grid GameGrid { get; set; }
     }
 }

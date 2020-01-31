@@ -192,6 +192,8 @@ namespace BattleshipsSolution3._0.Classes
                 PlaceShips(_ships);
                 while (!GameWon)
                 {
+                    _gameAi.GameGrid = _gameGrid;
+                    _gameAi.HitList = _hitList;
                     Shoot(_gameAi.Coordinate);
                     shotsFired++;
                 }
@@ -443,6 +445,5 @@ namespace BattleshipsSolution3._0.Classes
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-        //Grid something = ((MainWindow)System.Windows.Application.Current.MainWindow).
     }
 }
