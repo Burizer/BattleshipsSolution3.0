@@ -22,7 +22,7 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid Name="GameGrid1" Grid.Column="0">
+            <Grid Name="GameGrid1" Grid.Column="0" ShowGridLines="True">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
@@ -97,7 +97,7 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid Name="GameGrid2" Grid.Column="0">
+            <Grid Name="GameGrid2" Grid.Column="0" ShowGridLines="True">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
@@ -165,7 +165,7 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid Name="GameGrid3" Grid.Column="0">
+            <Grid Name="GameGrid3" Grid.Column="0" ShowGridLines="True">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
@@ -233,7 +233,7 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid Name="GameGrid4" Grid.Column="0">
+            <Grid Name="GameGrid4" Grid.Column="0" ShowGridLines="True">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>

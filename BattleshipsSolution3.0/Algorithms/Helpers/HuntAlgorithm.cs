@@ -116,6 +116,8 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                 {
                     Grid targetGridNorth = new Grid();
                     Grid targetGridSouth = new Grid();
+                    targetGridNorth.Tag = "";
+                    targetGridSouth.Tag = "";
                     try
                     {
                         targetGridNorth = _gameGrid.Children[_hitList[0] + 10] as Grid;

@@ -36,7 +36,7 @@ namespace BattleshipsSolution3._0.Classes
         private TextBlock _shotsMaximumBlock;
         private TextBlock _timeElapsedBlock;
         #endregion
-
+        
         public GameHandler(IBaseAI gameAi, Grid gameAndBoardGrid)
         {
             _gameAi = gameAi;
@@ -44,8 +44,10 @@ namespace BattleshipsSolution3._0.Classes
             _gameAi.HitList = _hitList;
             _gameGrid = VisualTreeHelper.GetChild(_gameAndBoardGrid, 0) as Grid;
             _scoreGrid = VisualTreeHelper.GetChild(_gameAndBoardGrid, 1) as Grid;
-            PopulateGrids();
+            //PopulateGrids();
+            //PlaceShips(new Shiplist());
             SetScoreBoardControls();
+            
             PlayGame(100);
         }
 
@@ -149,6 +151,8 @@ namespace BattleshipsSolution3._0.Classes
                     newGrid.SetValue(Grid.ColumnProperty, x);
                     newGrid.Width = 30;
                     newGrid.Height = 30;
+                    newGrid.Tag = "Water";
+                    newGrid.Background = new SolidColorBrush(Colors.AliceBlue);
                     newGrid.MouseDown += GameGrid_MouseDown;
                     _gameGrid.Children.Add(newGrid);
                 }
@@ -183,12 +187,7 @@ namespace BattleshipsSolution3._0.Classes
                 int shotsFired = 0;
                 _ships = new Shiplist();
                 _hitCoordinateAndType = new List<Tuple<int, string>>();
-                foreach (Grid item in _gameGrid.Children)
-                {
-                    item.Tag = "Water";
-                    item.Background = new SolidColorBrush(Colors.LightSkyBlue);
-
-                }
+                PopulateGrids();
                 PlaceShips(_ships);
                 while (!GameWon)
                 {
@@ -260,7 +259,13 @@ namespace BattleshipsSolution3._0.Classes
         {
             bool placementValid = true;
             int shipStartIndex = _random.Next(0, 100 - ship.Length);
-            var gridVar = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex) as Grid;
+            Grid gridVar = new Grid();
+            gridVar.Tag = "";
+            try
+            {
+                gridVar = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex) as Grid;
+            }
+            catch { }
             int direction = _random.Next(1, 4);
             switch (direction)
             {
