@@ -17,6 +17,7 @@ namespace BattleshipsSolution3._0.Algorithms
         private List<int> _hitList = new List<int>();
         private static Random _random = new Random();
         private HuntAlgorithm _hunt;
+        private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
         public HuntAndTargetAlgorithm(Grid gameGrid)
         {
             _gameGrid = gameGrid;
@@ -26,39 +27,51 @@ namespace BattleshipsSolution3._0.Algorithms
         {
             get
             {
+                bool viableHit = false;
+                int randomHit = -1;
+                
                 if (_hitList.Count != 0)
                 {
                     return _hunt.Coordinate;
                 }
-                return _random.Next(0, 99);
+                while (!viableHit)
+                {
+                    randomHit = _random.Next(0, 99);
+                    Grid targetGrid = _gameGrid.Children[randomHit] as Grid;
+                    if (targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString()))
+                    {
+                        viableHit = true;
+                    }
+                }
+                return randomHit;
             }
         }
 
-        public Grid GameGrid
+    public Grid GameGrid
+    {
+        get { return _gameGrid; }
+        set
         {
-            get { return _gameGrid; }
-            set
-            {
-                _gameGrid = value;
-                OnPropertyChanged();
-            }
+            _gameGrid = value;
+            OnPropertyChanged();
         }
-        public List<int> HitList
-        {
-            get { return _hitList; }
-            set
-            {
-                _hitList = value;
-                OnPropertyChanged();
-            }
-        }
-        #region OnPropertyChanged code
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
+    public List<int> HitList
+    {
+        get { return _hitList; }
+        set
+        {
+            _hitList = value;
+            OnPropertyChanged();
+        }
+    }
+    #region OnPropertyChanged code
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    #endregion
+}
 }
