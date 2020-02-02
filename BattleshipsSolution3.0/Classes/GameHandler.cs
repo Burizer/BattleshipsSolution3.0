@@ -47,7 +47,6 @@ namespace BattleshipsSolution3._0.Classes
             //PopulateGrids();
             //PlaceShips(new Shiplist());
             SetScoreBoardControls();
-            
             PlayGame(100);
         }
 

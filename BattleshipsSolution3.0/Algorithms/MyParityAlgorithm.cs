@@ -18,6 +18,7 @@ namespace BattleshipsSolution3._0.Algorithms
         private Grid _gameGrid;
         private List<int> _hitList = new List<int>();
         private HuntAlgorithm _hunt;
+        private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
         public MyParityAlgorithm(Grid gameGrid)
         {
             _gameGrid = gameGrid;
@@ -35,17 +36,23 @@ namespace BattleshipsSolution3._0.Algorithms
                 }
                 else
                 {
-                _counter += 2;
-                if (_counter % 20 < 11 || _counter % 20 == 0)
-                {
-                    return _counter - 1;
-                }
-                else
-                {
-                    return _counter - 2;
+                    _counter += 2;
+                    Grid targetGrid = _gameGrid.Children[_counter] as Grid;
+                    if (targetGrid.Tag.ToString() != "Water" || shipNames.Contains(targetGrid.Tag.ToString()))
+                    {
+                        return Coordinate;
+                    }
+                    if (_counter % 20 < 11 || _counter % 20 == 0)
+                    {
+                        return _counter - 1;
+                    }
+                    else
+                    {
+                        return _counter - 2;
+                    }
                 }
             }
-        }}
+        }
 
         public Grid GameGrid
         {
