@@ -32,6 +32,8 @@ namespace BattleshipsSolution3._0.Algorithms
                 
                 if (_hitList.Count != 0)
                 {
+                    _hunt.GameGrid = _gameGrid;
+                    _hunt.HitList = _hitList;
                     return _hunt.Coordinate;
                 }
                 while (!viableHit)

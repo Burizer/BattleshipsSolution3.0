@@ -44,7 +44,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             get
             {
                 _hitList.Sort();
-                
+                #region Single count
                 if (_hitList.Count == 1 || (_hitList[0] % 10 != _hitList[1] % 10 && _hitList[0] % 10 != (_hitList[1] % 10) - 1 && _hitList[0] % 10 != (_hitList[1] % 10) + 1))
                 {
                     List<int> potentialHits = new List<int>();
@@ -108,6 +108,8 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                         }
                     }
                 }
+                #endregion
+                #region Multiple count, no pattern
                 bool isVertical = false;
                 try
                 {
@@ -205,6 +207,8 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                         }
                     }
                 }
+                #endregion
+                #region Multiple count, pattern
                 int hitListFirst = _hitList[0];
                 int hitListSecond = _hitList[1];
                 int hitListLast = _hitList[_hitList.Count - 1];
@@ -261,6 +265,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                 {
                     return _hitList[0] - 1;
                 }
+                #endregion
                 return -1;
             }
         }

@@ -266,6 +266,8 @@ namespace BattleshipsSolution3._0.Classes
             }
             catch { }
             int direction = _random.Next(1, 4);
+            Grid shipLengthGrid = new Grid();
+            shipLengthGrid.Tag = "";
             switch (direction)
             {
                 ///North
@@ -274,7 +276,6 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
-                            Grid shipLengthGrid = new Grid();
                             try
                             {
                                 shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (10 * i)) as Grid;
@@ -313,7 +314,6 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
-                            Grid shipLengthGrid = new Grid();
                             try
                             {
                                 shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (1 * i)) as Grid;
@@ -325,7 +325,7 @@ namespace BattleshipsSolution3._0.Classes
                                 placementValid = false;
                                 break;
                             }
-                            if (gridVar != shipLengthGrid && shipStartIndex + (1 * i) % 10 != 1 && (shipLengthGrid.Tag.ToString() != "Water" || shipLengthGrid == null))
+                            if (gridVar != shipLengthGrid && shipStartIndex + (1 * i) % 10 != 1 && (shipLengthGrid.Tag.ToString() != "Water"))
                             {
                                 ValidateShipPlacement(ship);
                                 placementValid = false;
@@ -353,7 +353,6 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
-                            Grid shipLengthGrid = new Grid();
                             try
                             {
                                 shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (10 * i)) as Grid;
@@ -364,7 +363,7 @@ namespace BattleshipsSolution3._0.Classes
                                 placementValid = false;
                                 break;
                             }
-                            if (shipLengthGrid.Tag.ToString() != "Water" || shipLengthGrid == null)
+                            if (shipLengthGrid.Tag.ToString() != "Water")
                             {
                                 ValidateShipPlacement(ship);
                                 placementValid = false;
@@ -392,7 +391,6 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
-                            Grid shipLengthGrid = new Grid();
                             try
                             {
                                 shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (1 * i)) as Grid;
@@ -403,7 +401,7 @@ namespace BattleshipsSolution3._0.Classes
                                 placementValid = false;
                                 break;
                             }
-                            if (gridVar != shipLengthGrid && shipStartIndex - (1 * i) % 10 != 0 && (shipLengthGrid.Tag.ToString() != "Water" || shipLengthGrid.Name == null))
+                            if (gridVar != shipLengthGrid && shipStartIndex - (1 * i) % 10 != 0 && (shipLengthGrid.Tag.ToString() != "Water"))
                             {
                                 ValidateShipPlacement(ship);
                                 placementValid = false;

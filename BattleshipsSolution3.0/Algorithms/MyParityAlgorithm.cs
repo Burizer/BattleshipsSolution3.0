@@ -36,12 +36,17 @@ namespace BattleshipsSolution3._0.Algorithms
                 }
                 else
                 {
-                    _counter += 2;
-                    Grid targetGrid = _gameGrid.Children[_counter] as Grid;
-                    if (targetGrid.Tag.ToString() != "Water" || shipNames.Contains(targetGrid.Tag.ToString()))
+                    bool viableHit = false;
+                    while (!viableHit)
                     {
-                        return Coordinate;
+                        _counter += 2;
+                        Grid targetGrid = _gameGrid.Children[_counter] as Grid;
+                        if (targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString()))
+                        {
+                            viableHit = true;
+                        }
                     }
+                    
                     if (_counter % 20 < 11 || _counter % 20 == 0)
                     {
                         return _counter - 1;
