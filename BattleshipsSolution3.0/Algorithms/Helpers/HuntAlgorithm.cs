@@ -80,15 +80,15 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     {
                         potentialHits.Add(1);
                     }
-                    if (targetGridEast.Tag.ToString() == "Water" || shipNames.Contains(targetGridNorth.Tag.ToString()))
+                    if (targetGridEast.Tag.ToString() == "Water" || shipNames.Contains(targetGridEast.Tag.ToString()))
                     {
                         potentialHits.Add(2);
                     }
-                    if (targetGridSouth.Tag.ToString() == "Water" || shipNames.Contains(targetGridNorth.Tag.ToString()))
+                    if (targetGridSouth.Tag.ToString() == "Water" || shipNames.Contains(targetGridSouth.Tag.ToString()))
                     {
                         potentialHits.Add(3);
                     }
-                    if (targetGridWest.Tag.ToString() == "Water" || shipNames.Contains(targetGridNorth.Tag.ToString()))
+                    if (targetGridWest.Tag.ToString() == "Water" || shipNames.Contains(targetGridWest.Tag.ToString()))
                     {
                         potentialHits.Add(4);
                     }
@@ -132,7 +132,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                         targetGridSouth = _gameGrid.Children[_hitList[_hitList.Count - 1] - 10] as Grid;
                     }
                     catch { }
-                    if ((targetGridNorth.Tag.ToString() != "Water" || !shipNames.Contains(targetGridNorth.Tag.ToString())) && (targetGridSouth.Tag.ToString() != "Water" || !shipNames.Contains(targetGridNorth.Tag.ToString())))
+                    if ((targetGridNorth.Tag.ToString() != "Water" || !shipNames.Contains(targetGridNorth.Tag.ToString())) && (targetGridSouth.Tag.ToString() != "Water" || !shipNames.Contains(targetGridSouth.Tag.ToString())))
                     {
                         foreach (var item in _hitList)
                         {
