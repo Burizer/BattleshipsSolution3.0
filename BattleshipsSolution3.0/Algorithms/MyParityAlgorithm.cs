@@ -19,6 +19,7 @@ namespace BattleshipsSolution3._0.Algorithms
         private List<int> _hitList = new List<int>();
         private HuntAlgorithm _hunt;
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
+        private static readonly Object lockObj = new object();
         public MyParityAlgorithm(Grid gameGrid)
         {
             _gameGrid = gameGrid;
@@ -30,8 +31,11 @@ namespace BattleshipsSolution3._0.Algorithms
             {
                 if (_hitList.Count != 0)
                 {
-                    _hunt.GameGrid = _gameGrid;
-                    _hunt.HitList = _hitList;
+                    lock (lockObj)
+                    {
+                        _hunt.GameGrid = _gameGrid;
+                        _hunt.HitList = _hitList;
+                    }
                     return _hunt.Coordinate;
                 }
                 else
@@ -46,7 +50,7 @@ namespace BattleshipsSolution3._0.Algorithms
                             viableHit = true;
                         }
                     }
-                    
+
                     if (_counter % 20 < 11 || _counter % 20 == 0)
                     {
                         return _counter - 1;
@@ -61,7 +65,11 @@ namespace BattleshipsSolution3._0.Algorithms
 
         public Grid GameGrid
         {
-            get { return _gameGrid; }
+            get
+            {
+                lock (lockObj)
+                { return _gameGrid; }
+            }
             set
             {
                 _gameGrid = value;
@@ -70,7 +78,13 @@ namespace BattleshipsSolution3._0.Algorithms
         }
         public List<int> HitList
         {
-            get { return _hitList; }
+            get
+            {
+                lock (lockObj)
+                {
+                    return _hitList;
+                }
+            }
             set
             {
                 _hitList = value;

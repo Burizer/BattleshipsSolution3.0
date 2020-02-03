@@ -16,6 +16,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
         private List<int> _hitList;
         private Grid _gameGrid;
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
+        private static readonly Object lockObj = new object();
         public HuntAlgorithm(List<int> hitList, Grid gameGrid)
         {
             _hitList = hitList;
@@ -23,7 +24,11 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
         }
         public List<int> HitList
         {
-            get { return _hitList; }
+            get
+            {
+                lock (lockObj)
+                { return _hitList; }
+            }
             set
             {
                 _hitList = value;
@@ -32,7 +37,13 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
         }
         public Grid GameGrid
         {
-            get { return _gameGrid; }
+            get
+            {
+                lock (lockObj)
+                {
+                    return _gameGrid;
+                }
+            }
             set
             {
                 _gameGrid = value;
@@ -94,7 +105,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     }
                     if (potentialHits.Count != 0)
                     {
-                        int direction = potentialHits[_random.Next(potentialHits.Count)];
+                        int direction = potentialHits[_random.Next(potentialHits.Count - 1)];
                         switch (direction)
                         {
                             case 1:

@@ -25,6 +25,7 @@ namespace BattleshipsSolution3._0.Classes
         private List<int> _hitList = new List<int>();
         private List<int> _totalShots = new List<int>();
         private List<Tuple<int, string>> _hitCoordinateAndType;
+        private static readonly Object lockObj = new Object();
         private string _algorithmName = "";
         private int _shotsAverage = 0;
         private int _shotsMinimum = 0;
@@ -36,7 +37,7 @@ namespace BattleshipsSolution3._0.Classes
         private TextBlock _shotsMaximumBlock;
         private TextBlock _timeElapsedBlock;
         #endregion
-        
+
         public GameHandler(IBaseAI gameAi, Grid gameAndBoardGrid)
         {
             _gameAi = gameAi;
@@ -70,6 +71,11 @@ namespace BattleshipsSolution3._0.Classes
         public Grid GameGrid
         {
             get { return _gameGrid; }
+            set
+            {
+                _gameGrid = value;
+                OnPropertyChanged();
+            }
         }
         public Grid ScoreGrid
         {
@@ -190,8 +196,11 @@ namespace BattleshipsSolution3._0.Classes
                 PlaceShips(_ships);
                 while (!GameWon)
                 {
-                    _gameAi.GameGrid = _gameGrid;
-                    _gameAi.HitList = _hitList;
+                    lock (lockObj)
+                    {
+                        _gameAi.GameGrid = _gameGrid;
+                        _gameAi.HitList = _hitList;
+                    }
                     Shoot(_gameAi.Coordinate);
                     shotsFired++;
                 }
@@ -257,7 +266,7 @@ namespace BattleshipsSolution3._0.Classes
         public void ValidateShipPlacement(Ship ship)
         {
             bool placementValid = true;
-            int shipStartIndex = _random.Next(0, 100 - ship.Length);
+            int shipStartIndex = _random.Next(0,99);
             Grid gridVar = new Grid();
             gridVar.Tag = "";
             try
