@@ -180,13 +180,12 @@ namespace BattleshipsSolution3._0.Classes
         private void GameGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Grid targetGrid = sender as Grid;
-            Shoot(1);
+            CheckHit(-1);
         }
         public void PlayGame(int iterations)
         {
-            DispatcherTimer gameTimer = new DispatcherTimer();
-            _algorithmName = GameGrid.GetType().ToString();
-            gameTimer.Start();
+            DateTime gameTimer = new DateTime();
+            gameTimer = DateTime.Now;
             for (int i = 0; i < iterations; i++)
             {
                 int shotsFired = 0;
@@ -201,16 +200,14 @@ namespace BattleshipsSolution3._0.Classes
                         _gameAi.GameGrid = _gameGrid;
                         _gameAi.HitList = _hitList;
                     }
-                    Shoot(_gameAi.Coordinate);
+                    CheckHit(_gameAi.Coordinate);
                     shotsFired++;
                 }
                 _totalShots.Add(shotsFired);
-                int averageShots = 0;
                 foreach (int shot in _totalShots)
                 {
-                    averageShots += shot;
+                    _shotsAverage = _totalShots.Sum() / _totalShots.Count;
                 }
-                _shotsAverage = averageShots / i;
                 if (i == 0 || shotsFired < _shotsMinimum)
                 {
                     _shotsMinimum = shotsFired;
@@ -220,8 +217,9 @@ namespace BattleshipsSolution3._0.Classes
                     _shotsMaximum = shotsFired;
                 }
             }
-            gameTimer.Stop();
-            _timeElapsed = gameTimer.ToString();
+            TimeSpan gameEndTimer = new TimeSpan();
+            gameEndTimer = gameTimer - DateTime.Now.Date;
+            _timeElapsed = gameEndTimer.TotalMinutes + ":" + gameEndTimer.TotalSeconds + ":" + gameEndTimer.TotalMilliseconds;
 
         }
         public void PlaceShips(Shiplist shipList)
@@ -231,42 +229,10 @@ namespace BattleshipsSolution3._0.Classes
                 ValidateShipPlacement(item);
             }
         }
-        public void Shoot(int coord)
-        {
-            var hitGrid = VisualTreeHelper.GetChild(_gameGrid, coord) as Grid;
-            CheckHit(hitGrid, coord);
-        }
-        public void CheckHit(Grid grid, int coord)
-        {
-            if (grid.Tag.ToString() == "Water")
-            {
-                grid.Tag = "Miss";
-                grid.Background = new SolidColorBrush(Colors.LightSalmon);
-            }
-            else
-            {
-                _hitCoordinateAndType.Add(new Tuple<int, string>(coord, grid.Tag.ToString()));
-                foreach (Ship item in _ships.Ships)
-                {
-                    if (item.Name == grid.Tag.ToString())
-                    {
-                        item.Hits--;
-                        if (item.IsSunk)
-                        {
-                            _hitList = _hitCoordinateAndType.Where(x => x.Item2 != item.Name).Select(x => x.Item1).ToList<int>();
-                        }
-                    }
-
-                }
-                grid.Tag = "Hit";
-                grid.Background = new SolidColorBrush(Colors.LightGreen);
-                _hitList.Add(coord);
-            }
-        }
         public void ValidateShipPlacement(Ship ship)
         {
             bool placementValid = true;
-            int shipStartIndex = _random.Next(0,99);
+            int shipStartIndex = _random.Next(0, 99);
             Grid gridVar = new Grid();
             gridVar.Tag = "";
             try
@@ -434,6 +400,37 @@ namespace BattleshipsSolution3._0.Classes
                     return;
             }
         }
+        public void CheckHit(int coord)
+        {
+            Grid hitGrid = new Grid();
+            hitGrid.Tag = "";
+            hitGrid = VisualTreeHelper.GetChild(_gameGrid, coord) as Grid;
+            if (hitGrid.Tag.ToString() == "Water")
+            {
+                hitGrid.Tag = "Miss";
+                hitGrid.Background = new SolidColorBrush(Colors.LightSalmon);
+            }
+            else
+            {
+                _hitCoordinateAndType.Add(new Tuple<int, string>(coord, hitGrid.Tag.ToString()));
+                foreach (Ship item in _ships.Ships)
+                {
+                    if (item.Name == hitGrid.Tag.ToString())
+                    {
+                        item.Hits--;
+                        if (item.IsSunk)
+                        {
+                            _hitList = _hitCoordinateAndType.Where(x => x.Item2 != item.Name).Select(x => x.Item1).ToList<int>();
+                        }
+                    }
+
+                }
+                hitGrid.Tag = "Hit";
+                hitGrid.Background = new SolidColorBrush(Colors.LightGreen);
+                _hitList.Add(coord);
+            }
+        }
+
         public bool GameWon
         {
             get
