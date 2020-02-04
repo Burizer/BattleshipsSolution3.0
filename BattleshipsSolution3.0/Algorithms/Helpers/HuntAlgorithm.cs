@@ -12,16 +12,21 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
 
     public class HuntAlgorithm
     {
+        #region Instance fields
         private Random _random = new Random();
         private List<int> _hitList;
         private Grid _gameGrid;
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
         private static readonly Object lockObj = new object();
+        #endregion
+        #region Constructor
         public HuntAlgorithm(List<int> hitList, Grid gameGrid)
         {
             _hitList = hitList;
             _gameGrid = gameGrid;
         }
+        #endregion
+        #region Properties
         public List<int> HitList
         {
             get
@@ -56,8 +61,9 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             {
                 _hitList.Sort();
                 #region Single count
-                if (_hitList.Count == 1 || (_hitList[0] % 10 != _hitList[1] % 10 && _hitList[0] % 10 != (_hitList[1] % 10) - 1 && _hitList[0] % 10 != (_hitList[1] % 10) + 1))
+                if (_hitList.Count == 1 || (_hitList[0] % 10 != _hitList[1] % 10 && _hitList[0] % 10 != (_hitList[1] % 10) + 1))
                 {
+                    int currentGrid = _hitList[0];
                     List<int> potentialHits = new List<int>();
                     Grid targetGridNorth = new Grid();
                     targetGridNorth.Tag = "";
@@ -69,29 +75,29 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     targetGridWest.Tag = "";
                     try
                     {
-                        targetGridNorth = _gameGrid.Children[_hitList[0] - 10] as Grid;
+                        targetGridNorth = _gameGrid.Children[currentGrid - 10] as Grid;
                     }
                     catch { }
                     try
                     {
-                        targetGridEast = _gameGrid.Children[_hitList[0] + 1] as Grid;
+                        targetGridEast = _gameGrid.Children[currentGrid + 1] as Grid;
                     }
                     catch { }
                     try
                     {
-                        targetGridSouth = _gameGrid.Children[_hitList[0] + 10] as Grid;
+                        targetGridSouth = _gameGrid.Children[currentGrid + 10] as Grid;
                     }
                     catch { }
                     try
                     {
-                        targetGridWest = _gameGrid.Children[_hitList[0] - 1] as Grid;
+                        targetGridWest = _gameGrid.Children[currentGrid - 1] as Grid;
                     }
                     catch { }
                     if (targetGridNorth.Tag.ToString() == "Water" || shipNames.Contains(targetGridNorth.Tag.ToString()))
                     {
                         potentialHits.Add(1);
                     }
-                    if (targetGridEast.Tag.ToString() == "Water" || shipNames.Contains(targetGridEast.Tag.ToString()))
+                    if ((targetGridEast.Tag.ToString() == "Water" || shipNames.Contains(targetGridEast.Tag.ToString())) && currentGrid + 1 % 10 != 0)
                     {
                         potentialHits.Add(2);
                     }
@@ -99,13 +105,13 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     {
                         potentialHits.Add(3);
                     }
-                    if (targetGridWest.Tag.ToString() == "Water" || shipNames.Contains(targetGridWest.Tag.ToString()))
+                    if ((targetGridWest.Tag.ToString() == "Water" || shipNames.Contains(targetGridWest.Tag.ToString())) && currentGrid - 1 % 10 != 1)
                     {
                         potentialHits.Add(4);
                     }
                     if (potentialHits.Count != 0)
                     {
-                        int direction = potentialHits[_random.Next(potentialHits.Count - 1)];
+                        int direction = potentialHits[_random.Next(0, potentialHits.Count - 1)];
                         switch (direction)
                         {
                             case 1:
@@ -118,6 +124,64 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                                 return _hitList[0] - 1;
                         }
                     }
+                }
+                #endregion
+                #region Multiple count, pattern
+                int hitListFirst = _hitList[0];
+                int hitListSecond = _hitList[1];
+                int hitListSecondToLast = _hitList[_hitList.Count - 2];
+                int hitListLast = _hitList[_hitList.Count - 1];
+                List<int> tryVertical = new List<int>();
+
+
+                Grid gameGridChild = new Grid();
+                gameGridChild.Tag = "";
+                //North
+                foreach (int val in _hitList)
+                {
+                    if (val % 10 == hitListFirst % 10)
+                    {
+                        tryVertical.Add(val);
+                    }
+                }
+                try
+                {
+                    gameGridChild = _gameGrid.Children[tryVertical[0] - 10] as Grid;
+                }
+                catch { }
+                if (tryVertical.Count > 1 && (gameGridChild.Tag.ToString() == "Water" || shipNames.Contains(gameGridChild.Tag.ToString())))
+                {
+                    return _hitList[0] - 10;
+                }
+                //East
+                try
+                {
+                    gameGridChild = _gameGrid.Children[(hitListLast) + 1] as Grid;
+                }
+                catch { }
+                if (hitListLast == hitListSecondToLast + 1 && (gameGridChild.Tag.ToString() == "Water" || shipNames.Contains(gameGridChild.Tag.ToString())) && (hitListLast + 1) % 10 != 0)
+                {
+                    return _hitList[_hitList.Count - 1] + 1;
+                }
+                //South
+                try
+                {
+                    gameGridChild = _gameGrid.Children[tryVertical[tryVertical.Count - 1] + 10] as Grid;
+                }
+                catch { }
+                if (tryVertical.Count > 1 && (gameGridChild.Tag.ToString() == "Water" || shipNames.Contains(gameGridChild.Tag.ToString())))
+                {
+                    return _hitList[_hitList.Count - 1] + 10;
+                }
+                //West
+                try
+                {
+                    gameGridChild = _gameGrid.Children[(_hitList[0]) - 1] as Grid;
+                }
+                catch { }
+                if (hitListFirst == hitListSecond - 1 && (gameGridChild.Tag.ToString() == "Water" || shipNames.Contains(gameGridChild.Tag.ToString())) && (hitListFirst - 1) % 10 != 1)
+                {
+                    return _hitList[0] - 1;
                 }
                 #endregion
                 #region Multiple count, no pattern
@@ -135,7 +199,15 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     targetGridSouth.Tag = "";
                     try
                     {
-                        targetGridNorth = _gameGrid.Children[_hitList[0] + 10] as Grid;
+                        foreach (int item in _hitList)
+                        {
+                            if (item % 10 == _hitList[_hitList.Count - 1] % 10)
+                            {
+                                targetGridNorth = _gameGrid.Children[_hitList[0] + 10] as Grid;
+                                break;
+                            }
+                        }
+
                     }
                     catch { }
                     try
@@ -198,88 +270,32 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                             targetGridSouth.Tag = "";
                             try
                             {
-                                targetGridNorth = _gameGrid.Children[item + 10] as Grid;
+                                targetGridNorth = _gameGrid.Children[item - 10] as Grid;
                             }
                             catch { }
 
                             try
                             {
-                                targetGridSouth = _gameGrid.Children[item - 10] as Grid;
+                                targetGridSouth = _gameGrid.Children[item + 10] as Grid;
                             }
                             catch { }
                             if (targetGridNorth.Tag.ToString() == "Water" || shipNames.Contains(targetGridNorth.Tag.ToString()))
                             {
-                                return item + 10;
+                                return item - 10;
                             }
                             if (targetGridSouth.Tag.ToString() == "Water" || shipNames.Contains(targetGridSouth.Tag.ToString()))
                             {
-                                return item - 10;
+                                return item + 10;
                             }
                         }
                     }
                 }
                 #endregion
-                #region Multiple count, pattern
-                int hitListFirst = _hitList[0];
-                int hitListSecond = _hitList[1];
-                int hitListLast = _hitList[_hitList.Count - 1];
-                int hitListSecondToLast = -1;
-                Grid gameGridChild = new Grid();
-                gameGridChild.Tag = "";
-                //North
-                try
-                {
-                    gameGridChild = _gameGrid.Children[_hitList[0] - 10] as Grid;
-                }
-                catch { }
-                if (hitListFirst == hitListSecond - 10 && (gameGridChild.Tag.ToString() == "Water" || shipNames.Contains(gameGridChild.Tag.ToString())))
-                {
-                    return _hitList[0] - 10;
-                }
-                //East
-                try
-                {
-                    hitListSecondToLast = _hitList[_hitList.Count - 2] + 1;
-                }
-                catch { }
-                try
-                {
-                    gameGridChild = _gameGrid.Children[(_hitList.Count - 1) + 1] as Grid;
-                }
-                catch { }
-                if (hitListLast == hitListSecondToLast && (gameGridChild.Tag.ToString() == "Water" || shipNames.Contains(gameGridChild.Tag.ToString())))
-                {
-                    return _hitList[_hitList.Count - 1] + 1;
-                }
-                //South
-                try
-                {
-                    hitListSecondToLast = _hitList[_hitList.Count - 2] + 10;
-                }
-                catch { }
-                try
-                {
-                    gameGridChild = _gameGrid.Children[(_hitList.Count - 1) + 10] as Grid;
-                }
-                catch { }
-                if (hitListLast == hitListSecondToLast && (gameGridChild.Tag.ToString() == "Water" || shipNames.Contains(gameGridChild.Tag.ToString())))
-                {
-                    return _hitList[_hitList.Count - 1] + 10;
-                }
-                //West
-                try
-                {
-                    gameGridChild = _gameGrid.Children[_hitList[0] - 1] as Grid;
-                }
-                catch { }
-                if (hitListFirst == hitListSecond - 1 && (gameGridChild.Tag.ToString() == "Water" || shipNames.Contains(gameGridChild.Tag.ToString())))
-                {
-                    return _hitList[0] - 1;
-                }
-                #endregion
+
                 return -1;
             }
         }
+        #endregion
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
 

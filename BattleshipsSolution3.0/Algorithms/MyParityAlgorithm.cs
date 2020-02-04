@@ -12,46 +12,70 @@ using System.Windows.Controls;
 
 namespace BattleshipsSolution3._0.Algorithms
 {
-    class MyParityAlgorithm : IBaseAI
+    public class MyParityAlgorithm : IBaseAI
     {
+        #region Instance fields
         private int _counter = 0;
         private Grid _gameGrid;
         private List<int> _hitList = new List<int>();
         private HuntAlgorithm _hunt;
+        private Random _random = new Random();
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
-        private static readonly Object lockObj = new object();
+        #endregion
+        #region Constructor
         public MyParityAlgorithm(Grid gameGrid)
         {
             _gameGrid = gameGrid;
             _hunt = new HuntAlgorithm(_hitList, gameGrid);
         }
+        #endregion
+        #region Properties
         public int Coordinate
         {
             get
             {
                 if (_hitList.Count != 0)
                 {
-                    lock (lockObj)
-                    {
-                        _hunt.GameGrid = _gameGrid;
-                        _hunt.HitList = _hitList;
-                    }
+                    _hunt.GameGrid = _gameGrid;
+                    _hunt.HitList = _hitList;
                     return _hunt.Coordinate;
                 }
-                else
+
+                else if (_counter < 100)
                 {
                     bool viableHit = false;
+                    Grid targetGrid = new Grid();
+                    targetGrid.Tag = "";
                     while (!viableHit)
                     {
                         _counter += 2;
-                        Grid targetGrid = _gameGrid.Children[_counter] as Grid;
-                        if (targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString()))
+                        if (_counter % 20 < 11)
                         {
-                            viableHit = true;
+                            try
+                            {
+                                targetGrid = _gameGrid.Children[_counter - 1] as Grid;
+                            }
+                            catch { }
+                            if ((targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString())) && targetGrid.Tag.ToString() != "Hit")
+                            {
+                                viableHit = true;
+                            }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                targetGrid = _gameGrid.Children[_counter - 2] as Grid;
+                            }
+                            catch { }
+                            if ((targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString())) && targetGrid.Tag.ToString() != "Hit")
+                            {
+                                viableHit = true;
+                            }
                         }
                     }
 
-                    if (_counter % 20 < 11 || _counter % 20 == 0)
+                    if (_counter % 20 < 11)
                     {
                         return _counter - 1;
                     }
@@ -60,6 +84,30 @@ namespace BattleshipsSolution3._0.Algorithms
                         return _counter - 2;
                     }
                 }
+                else
+                {
+                    bool viableHit = false;
+                    int target = -1;
+                    Grid targetGrid = new Grid();
+                    targetGrid.Tag = "";
+                    while (!viableHit)
+                    {
+                        target = _random.Next(0, 99);
+                        try
+                        {
+                            targetGrid = _gameGrid.Children[target] as Grid;
+                        }
+                        catch
+                        {
+
+                        }
+                        if ((targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString())) && targetGrid.Tag.ToString() != "Hit")
+                        {
+                            viableHit = true;
+                        }
+                    }
+                    return target;
+                }
             }
         }
 
@@ -67,8 +115,7 @@ namespace BattleshipsSolution3._0.Algorithms
         {
             get
             {
-                lock (lockObj)
-                { return _gameGrid; }
+                return _gameGrid;
             }
             set
             {
@@ -80,10 +127,7 @@ namespace BattleshipsSolution3._0.Algorithms
         {
             get
             {
-                lock (lockObj)
-                {
-                    return _hitList;
-                }
+                return _hitList;
             }
             set
             {
@@ -91,6 +135,7 @@ namespace BattleshipsSolution3._0.Algorithms
                 OnPropertyChanged();
             }
         }
+        #endregion
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
 

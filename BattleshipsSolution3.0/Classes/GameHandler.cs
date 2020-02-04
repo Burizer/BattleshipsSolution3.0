@@ -24,6 +24,7 @@ namespace BattleshipsSolution3._0.Classes
         private static Random _random = new Random();
         private List<int> _hitList = new List<int>();
         private List<int> _totalShots = new List<int>();
+        private List<string> _shipTypeList = new List<string>();
         private List<Tuple<int, string>> _hitCoordinateAndType;
         private static readonly Object lockObj = new Object();
         private string _algorithmName = "";
@@ -37,7 +38,7 @@ namespace BattleshipsSolution3._0.Classes
         private TextBlock _shotsMaximumBlock;
         private TextBlock _timeElapsedBlock;
         #endregion
-
+        #region Constructor
         public GameHandler(IBaseAI gameAi, Grid gameAndBoardGrid)
         {
             _gameAi = gameAi;
@@ -48,9 +49,9 @@ namespace BattleshipsSolution3._0.Classes
             //PopulateGrids();
             //PlaceShips(new Shiplist());
             SetScoreBoardControls();
-            PlayGame(100);
+            PlayGame(10);
         }
-
+        #endregion
         #region Properties
         public IBaseAI GameAi
         {
@@ -144,7 +145,15 @@ namespace BattleshipsSolution3._0.Classes
                 OnPropertyChanged();
             }
         }
+        public bool GameWon
+        {
+            get
+            {
+                return _ships.GameWon;
+            }
+        }
         #endregion
+        #region Methods
         private void PopulateGrids()
         {
             for (int y = 0; y < 10; y++)
@@ -191,6 +200,7 @@ namespace BattleshipsSolution3._0.Classes
                 int shotsFired = 0;
                 _ships = new Shiplist();
                 _hitCoordinateAndType = new List<Tuple<int, string>>();
+                _gameGrid.Children.Clear();
                 PopulateGrids();
                 PlaceShips(_ships);
                 while (!GameWon)
@@ -200,14 +210,12 @@ namespace BattleshipsSolution3._0.Classes
                         _gameAi.GameGrid = _gameGrid;
                         _gameAi.HitList = _hitList;
                     }
-                    CheckHit(_gameAi.Coordinate);
+                    int checkHitValue = _gameAi.Coordinate;
+                    CheckHit(checkHitValue);
                     shotsFired++;
                 }
                 _totalShots.Add(shotsFired);
-                foreach (int shot in _totalShots)
-                {
-                    _shotsAverage = _totalShots.Sum() / _totalShots.Count;
-                }
+                _shotsAverage = _totalShots.Sum() / _totalShots.Count;
                 if (i == 0 || shotsFired < _shotsMinimum)
                 {
                     _shotsMinimum = shotsFired;
@@ -241,8 +249,7 @@ namespace BattleshipsSolution3._0.Classes
             }
             catch { }
             int direction = _random.Next(1, 4);
-            Grid shipLengthGrid = new Grid();
-            shipLengthGrid.Tag = "";
+
             switch (direction)
             {
                 ///North
@@ -251,9 +258,14 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
+                            Grid shipLengthGrid = new Grid();
+                            shipLengthGrid.Tag = "";
                             try
                             {
-                                shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (10 * i)) as Grid;
+                                if (shipStartIndex < 100 || shipStartIndex > -1)
+                                {
+                                    shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (10 * i)) as Grid;
+                                }
                             }
                             catch
                             {
@@ -289,10 +301,14 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
+                            Grid shipLengthGrid = new Grid();
+                            shipLengthGrid.Tag = "";
                             try
                             {
-                                shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (1 * i)) as Grid;
-
+                                if (shipStartIndex < 100 || shipStartIndex > -1)
+                                {
+                                    shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (1 * i)) as Grid;
+                                }
                             }
                             catch
                             {
@@ -300,7 +316,7 @@ namespace BattleshipsSolution3._0.Classes
                                 placementValid = false;
                                 break;
                             }
-                            if (gridVar != shipLengthGrid && shipStartIndex + (1 * i) % 10 != 1 && (shipLengthGrid.Tag.ToString() != "Water"))
+                            if (i != 0 && shipStartIndex + (1 * i) % 10 != 0 && (shipLengthGrid.Tag.ToString() != "Water"))
                             {
                                 ValidateShipPlacement(ship);
                                 placementValid = false;
@@ -328,9 +344,14 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
+                            Grid shipLengthGrid = new Grid();
+                            shipLengthGrid.Tag = "";
                             try
                             {
-                                shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (10 * i)) as Grid;
+                                if (shipStartIndex < 100 || shipStartIndex > -1)
+                                {
+                                    shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (10 * i)) as Grid;
+                                }
                             }
                             catch
                             {
@@ -366,9 +387,14 @@ namespace BattleshipsSolution3._0.Classes
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
+                            Grid shipLengthGrid = new Grid();
+                            shipLengthGrid.Tag = "";
                             try
                             {
-                                shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (1 * i)) as Grid;
+                                if (shipStartIndex < 100 || shipStartIndex > -1)
+                                {
+                                    shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex - (1 * i)) as Grid;
+                                }
                             }
                             catch
                             {
@@ -376,7 +402,7 @@ namespace BattleshipsSolution3._0.Classes
                                 placementValid = false;
                                 break;
                             }
-                            if (gridVar != shipLengthGrid && shipStartIndex - (1 * i) % 10 != 0 && (shipLengthGrid.Tag.ToString() != "Water"))
+                            if (i != 0 && shipStartIndex - (1 * i) % 10 != 1 && (shipLengthGrid.Tag.ToString() != "Water"))
                             {
                                 ValidateShipPlacement(ship);
                                 placementValid = false;
@@ -402,6 +428,7 @@ namespace BattleshipsSolution3._0.Classes
         }
         public void CheckHit(int coord)
         {
+            bool shipIsSunk = false;
             Grid hitGrid = new Grid();
             hitGrid.Tag = "";
             hitGrid = VisualTreeHelper.GetChild(_gameGrid, coord) as Grid;
@@ -412,39 +439,31 @@ namespace BattleshipsSolution3._0.Classes
             }
             else
             {
+                _hitList.Add(coord);
                 _hitCoordinateAndType.Add(new Tuple<int, string>(coord, hitGrid.Tag.ToString()));
                 foreach (Ship item in _ships.Ships)
                 {
                     if (item.Name == hitGrid.Tag.ToString())
                     {
                         item.Hits--;
+
                         if (item.IsSunk)
                         {
-                            _hitList = _hitCoordinateAndType.Where(x => x.Item2 != item.Name).Select(x => x.Item1).ToList<int>();
+                            shipIsSunk = true;
                         }
                     }
+                }
+                if (shipIsSunk)
+                {
+                    var sunkenShips = _ships.Ships.Where(x => x.IsSunk).Select(x => x.Name);
+                    _hitList = _hitCoordinateAndType.Where(x => !sunkenShips.Contains(x.Item2)).Select(x => x.Item1).ToList();
 
                 }
                 hitGrid.Tag = "Hit";
                 hitGrid.Background = new SolidColorBrush(Colors.LightGreen);
-                _hitList.Add(coord);
             }
         }
-
-        public bool GameWon
-        {
-            get
-            {
-                foreach (var ship in _ships.Ships)
-                {
-                    if (!ship.IsSunk)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
+        #endregion
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
 

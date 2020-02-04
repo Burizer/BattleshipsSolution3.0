@@ -28,6 +28,20 @@ namespace BattleshipsSolution3._0.Classes
             get { return _ships; }
             set { _ships = value; }
         }
+        public bool GameWon
+        {
+            get
+            {
+                foreach (Ship ship in _ships)
+                {
+                    if (!ship.IsSunk)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
         public string CheckShipStatus
         {
             get

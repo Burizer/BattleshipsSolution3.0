@@ -13,23 +13,28 @@ namespace BattleshipsSolution3._0.Algorithms
 {
     public class HuntAndTargetAlgorithm : IBaseAI
     {
+        #region Instance fields
         private Grid _gameGrid;
         private List<int> _hitList = new List<int>();
         private static Random _random = new Random();
         private HuntAlgorithm _hunt;
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
+        #endregion
+        #region Constructor
         public HuntAndTargetAlgorithm(Grid gameGrid)
         {
             _gameGrid = gameGrid;
             _hunt = new HuntAlgorithm(_hitList, gameGrid);
         }
+        #endregion
+        #region Properties
         public int Coordinate
         {
             get
             {
                 bool viableHit = false;
                 int randomHit = -1;
-                
+
                 if (_hitList.Count != 0)
                 {
                     _hunt.GameGrid = _gameGrid;
@@ -49,31 +54,32 @@ namespace BattleshipsSolution3._0.Algorithms
             }
         }
 
-    public Grid GameGrid
-    {
-        get { return _gameGrid; }
-        set
+        public Grid GameGrid
         {
-            _gameGrid = value;
-            OnPropertyChanged();
+            get { return _gameGrid; }
+            set
+            {
+                _gameGrid = value;
+                OnPropertyChanged();
+            }
         }
-    }
-    public List<int> HitList
-    {
-        get { return _hitList; }
-        set
+        public List<int> HitList
         {
-            _hitList = value;
-            OnPropertyChanged();
+            get { return _hitList; }
+            set
+            {
+                _hitList = value;
+                OnPropertyChanged();
+            }
         }
-    }
-    #region OnPropertyChanged code
-    public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+        #region OnPropertyChanged code
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
-    #endregion
-}
 }
