@@ -23,10 +23,9 @@ namespace BattleshipsSolution3._0.Algorithms
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
         #endregion
         #region Constructor
-        public MyParityAlgorithm(Grid gameGrid)
+        public MyParityAlgorithm()
         {
-            _gameGrid = gameGrid;
-            _hunt = new HuntAlgorithm(_hitList, gameGrid);
+
         }
         #endregion
         #region Properties
@@ -121,6 +120,7 @@ namespace BattleshipsSolution3._0.Algorithms
             {
                 _gameGrid = value;
                 OnPropertyChanged();
+                _hunt = new HuntAlgorithm(_hitList, value);
             }
         }
         public List<int> HitList

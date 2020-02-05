@@ -62,6 +62,7 @@
     <Compile Include="Algorithms\Helpers\HuntAlgorithm.cs" />
     <Compile Include="Algorithms\HuntAndTargetAlgorithm.cs" />
     <Compile Include="Algorithms\MyParityAlgorithm.cs" />
+    <Compile Include="Algorithms\RandomTargeting.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

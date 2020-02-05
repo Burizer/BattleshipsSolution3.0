@@ -61,7 +61,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             {
                 _hitList.Sort();
                 #region Single count
-                if (_hitList.Count == 1 || (_hitList[0] % 10 != _hitList[1] % 10 && _hitList[0] % 10 != (_hitList[1] % 10) + 1))
+                if (_hitList.Count == 1 || (_hitList[0] % 10 != _hitList[1] % 10 && (_hitList[0] % 10 != (_hitList[1] % 10) + 1) && _hitList[0] + 10 != _hitList[1] + 1))
                 {
                     int currentGrid = _hitList[0];
                     List<int> potentialHits = new List<int>();
@@ -134,6 +134,16 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     if (val % 10 == _hitList[0] % 10)
                     {
                         tryVertical.Add(val);
+                    }
+                }
+                if (tryVertical.Count <= 1)
+                {
+                    foreach (int val in _hitList)
+                    {
+                        if (val % 10 == _hitList[_hitList.Count - 1])
+                        {
+                            tryVertical.Add(val);
+                        }
                     }
                 }
                 int tryIndexDef = -2;
@@ -221,7 +231,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
 
                     if (tryVertical.Count > 1 && (gameGridChildSouth.Tag.ToString() == "Water" || shipNames.Contains(gameGridChildSouth.Tag.ToString())))
                     {
-                        return _hitList[_hitList.Count - 1] + 10;
+                        return tryVertical[tryVertical.Count - 1] + 10;
                     }
                 }
                 else
@@ -304,7 +314,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             return -1;
         }
         #endregion
-            #region OnPropertyChanged code
+        #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

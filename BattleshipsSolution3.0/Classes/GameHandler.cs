@@ -39,7 +39,7 @@ namespace BattleshipsSolution3._0.Classes
         private TextBlock _timeElapsedBlock;
         #endregion
         #region Constructor
-        public GameHandler(IBaseAI gameAi, Grid gameAndBoardGrid)
+        public GameHandler(IBaseAI gameAi, Grid gameAndBoardGrid, int iterations)
         {
             _gameAi = gameAi;
             _gameAndBoardGrid = gameAndBoardGrid;
@@ -49,7 +49,7 @@ namespace BattleshipsSolution3._0.Classes
             //PopulateGrids();
             //PlaceShips(new Shiplist());
             SetScoreBoardControls();
-            PlayGame(1000);
+            PlayGame(iterations);
         }
         #endregion
         #region Properties
@@ -225,7 +225,8 @@ namespace BattleshipsSolution3._0.Classes
             gameEndTimer = DateTime.Now - gameTimer;
             _timeElapsed = gameEndTimer.ToString();
             //_timeElapsed = gameEndTimer.TotalMinutes + ":" + gameEndTimer.TotalSeconds + ":" + gameEndTimer.TotalMilliseconds;
-            _algorithmNameBlock.Text = _gameAi.GetType().ToString();
+            string[] typeNameSplit = _gameAi.GetType().ToString().Split(Convert.ToChar("."));
+            _algorithmNameBlock.Text = typeNameSplit[3];
             _shotsAverageBlock.Text = _shotsAverage.ToString();
             _shotsMinimumBlock.Text = _shotsMinimum.ToString();
             _shotsMaximumBlock.Text = _shotsMaximum.ToString();

@@ -11,7 +11,7 @@ using System.Windows.Controls;
 
 namespace BattleshipsSolution3._0.Algorithms
 {
-    public class HuntAndTargetAlgorithm : IBaseAI
+    class RandomTargeting : IBaseAI
     {
         #region Instance fields
         private Grid _gameGrid;
@@ -21,8 +21,9 @@ namespace BattleshipsSolution3._0.Algorithms
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
         #endregion
         #region Constructor
-        public HuntAndTargetAlgorithm()
+        public RandomTargeting()
         {
+
         }
         #endregion
         #region Properties
@@ -32,13 +33,6 @@ namespace BattleshipsSolution3._0.Algorithms
             {
                 bool viableHit = false;
                 int randomHit = -1;
-
-                if (_hitList.Count != 0)
-                {
-                    _hunt.GameGrid = _gameGrid;
-                    _hunt.HitList = _hitList;
-                    return _hunt.Coordinate;
-                }
                 while (!viableHit)
                 {
                     randomHit = _random.Next(0, 99);
@@ -51,7 +45,6 @@ namespace BattleshipsSolution3._0.Algorithms
                 return randomHit;
             }
         }
-
         public Grid GameGrid
         {
             get { return _gameGrid; }

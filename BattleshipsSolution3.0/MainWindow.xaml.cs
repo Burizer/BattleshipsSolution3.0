@@ -36,6 +36,7 @@ namespace BattleshipsSolution3._0
         public MainWindow()
         {
             InitializeComponent();
+            PopulateLists();
         }
         public string GridSelectionBox
         {
@@ -50,6 +51,32 @@ namespace BattleshipsSolution3._0
                 _aiBaseList = value;
                 OnPropertyChanged();
             }
+        }
+        public void PopulateLists()
+        {
+            foreach (string item in _aiBaseList)
+            {
+                ComboBoxItem comboItem1 = new ComboBoxItem();
+                comboItem1.Content = item;
+                comboItem1.Tag = item;
+                ComboBoxItem comboItem2 = new ComboBoxItem();
+                comboItem2.Content = item;
+                comboItem2.Tag = item;
+                ComboBoxItem comboItem3 = new ComboBoxItem();
+                comboItem3.Content = item;
+                comboItem3.Tag = item;
+                ComboBoxItem comboItem4 = new ComboBoxItem();
+                comboItem4.Content = item;
+                comboItem4.Tag = item;
+                GameSetupSelection1.Items.Add(comboItem1);
+                GameSetupSelection2.Items.Add(comboItem2);
+                GameSetupSelection3.Items.Add(comboItem3);
+                GameSetupSelection4.Items.Add(comboItem4);
+            }
+            GameSetupSelection1.SelectedItem = GameSetupSelection1.Items[0];
+            GameSetupSelection2.SelectedItem = GameSetupSelection2.Items[0];
+            GameSetupSelection3.SelectedItem = GameSetupSelection3.Items[0];
+            GameSetupSelection4.SelectedItem = GameSetupSelection4.Items[0];
         }
 
         //int generatedGrids = -1;
@@ -160,14 +187,37 @@ namespace BattleshipsSolution3._0
 
         private void BeginGame_Click(object sender, RoutedEventArgs e)
         {
+            List<Tuple<IBaseAI, Grid, int>> gameHandlerParams = new List<Tuple<IBaseAI, Grid, int>>();
             for (int i = 1; i < NumberOfGrids + 1; i++)
             {
                 var main = MainGrid as DependencyObject;
                 string NameOfGrid = "GameAndBoardGrid";
                 var findNameVar = LogicalTreeHelper.FindLogicalNode(main, NameOfGrid + i.ToString());
                 var newGrid = findNameVar as Grid;
-                GameHandler gameHandler = new GameHandler(new MyParityAlgorithm(newGrid), newGrid);
-                newGrid.Visibility = Visibility.Visible;
+                Grid setupGrid = GameSetupGrids;
+                Grid boxGrid = setupGrid.Children[i - 1] as Grid;
+                ComboBox comboBox = boxGrid.Children[0] as ComboBox;
+                TextBox textBox = boxGrid.Children[1] as TextBox;
+                int iterations = -1;
+                try
+                {
+                    iterations = Convert.ToInt32(textBox.Text);
+                }
+                catch
+                {
+                    return;
+                }
+                ComboBoxItem selected = comboBox.SelectedItem as ComboBoxItem;
+                string algorithmName = selected.Tag.ToString();
+                Type algorithmType = Type.GetType("BattleshipsSolution3._0.Algorithms." + algorithmName);
+                var algorithm = Activator.CreateInstance(algorithmType) as IBaseAI;
+                algorithm.GameGrid = newGrid;
+                gameHandlerParams.Add(Tuple.Create(algorithm, newGrid, iterations));
+            }
+            foreach (var item in gameHandlerParams)
+            {
+                GameHandler gameHandler = new GameHandler(item.Item1, item.Item2, item.Item3);
+                item.Item2.Visibility = Visibility.Visible;
             }
             GameSetupGrids.Visibility = Visibility.Hidden;
         }
