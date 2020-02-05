@@ -25,7 +25,7 @@ namespace BattleshipsSolution3._0.Classes
         private List<int> _hitList = new List<int>();
         private List<int> _totalShots = new List<int>();
         private List<string> _shipTypeList = new List<string>();
-        private List<Tuple<int, string>> _hitCoordinateAndType;
+        private Dictionary<int,string> _hitCoordinateAndType;
         private static readonly Object lockObj = new Object();
         private string _algorithmName = "";
         private int _shotsAverage = 0;
@@ -195,7 +195,7 @@ namespace BattleshipsSolution3._0.Classes
             {
                 int shotsFired = 0;
                 _ships = new Shiplist();
-                _hitCoordinateAndType = new List<Tuple<int, string>>();
+                _hitCoordinateAndType = new Dictionary<int, string>();
                 _gameGrid.Children.Clear();
                 PopulateGrids();
                 PlaceShips(_ships);
@@ -401,13 +401,12 @@ namespace BattleshipsSolution3._0.Classes
             else
             {
                 _hitList.Add(coord);
-                _hitCoordinateAndType.Add(new Tuple<int, string>(coord, hitGrid.Tag.ToString()));
+                _hitCoordinateAndType.Add(coord,hitGrid.Tag.ToString());
                 foreach (Ship item in _ships.Ships)
                 {
                     if (item.Name == hitGrid.Tag.ToString())
                     {
                         item.Hits--;
-
                         if (item.IsSunk)
                         {
                             shipIsSunk = true;
@@ -417,7 +416,7 @@ namespace BattleshipsSolution3._0.Classes
                 if (shipIsSunk)
                 {
                     var sunkenShips = _ships.Ships.Where(x => x.IsSunk).Select(x => x.Name);
-                    _hitList = _hitCoordinateAndType.Where(x => !sunkenShips.Contains(x.Item2)).Select(x => x.Item1).ToList();
+                    _hitList = _hitCoordinateAndType.Where(x => !sunkenShips.Contains(x.Value)).Select(x => x.Key).ToList();
 
                 }
                 hitGrid.Tag = "Hit";
