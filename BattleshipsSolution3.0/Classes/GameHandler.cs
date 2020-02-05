@@ -309,7 +309,7 @@ namespace BattleshipsSolution3._0.Classes
                                         break;
                                     }
                                 }
-                                if (i != 0 && (shipStartIndex + (placeMentIndexer * i) % 10 != 0 || shipLengthGrid.Tag.ToString() != "Water"))
+                                if (i != 0 && ((shipStartIndex + (placeMentIndexer * i)) % 10 != 0 || shipLengthGrid.Tag.ToString() != "Water"))
                                 {
                                     break;
                                 }
@@ -367,7 +367,7 @@ namespace BattleshipsSolution3._0.Classes
                                         break;
                                     }
                                 }
-                                if (i != 0 && (shipStartIndex + (placeMentIndexer * i) % 10 == 1 || shipLengthGrid.Tag.ToString() != "Water"))
+                                if (i != 0 && ((shipStartIndex + (placeMentIndexer * i)) % 10 == 1 || shipLengthGrid.Tag.ToString() != "Water"))
                                 {
                                     break;
                                 }

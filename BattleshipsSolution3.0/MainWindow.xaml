@@ -6,387 +6,389 @@
         xmlns:local="clr-namespace:BattleshipsSolution3._0"
         mc:Ignorable="d"
         Title="MainWindow">
-    <Grid x:Name="MainGrid"  Margin="10,0,0,10" >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="310"></RowDefinition>
-            <RowDefinition Height="310"></RowDefinition>
-            <RowDefinition Height="310"></RowDefinition>
-            <RowDefinition Height="310"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid Name="GameAndBoardGrid1" Grid.Row="0" Visibility="Hidden">
+    <ScrollViewer>
+        <Grid x:Name="MainGrid"  Margin="10,0,0,10" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid Name="GameGrid1" Grid.Column="0" ShowGridLines="True" >
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-            </Grid>
-            <Grid Name="ScoreBoardGrid1" Grid.Column="1" Margin="0,0,0,10">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid Name="AlgLabelGrid1" Grid.Row="0" Grid.Column="0">
-                    <Label Name="AlgLabel1" Content="Algoritme: "></Label>
-                </Grid>
-                <Grid Name="AlgTextBlockGrid1" Grid.Row="0" Grid.Column="1">
-                    <TextBlock Name="AlgTextBlock1" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MedianLabelGrid1" Grid.Row="1" Grid.Column="0">
-                    <Label Name="MedianLabel1" Content="Median: "></Label>
-                </Grid>
-                <Grid Name="MedianTextBlockGrid1" Grid.Row="1" Grid.Column="1">
-                    <TextBlock Name="MedianTextBlock1" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MinLabelGrid1" Grid.Row="2" Grid.Column="0">
-                    <Label Name="MinLabel1" Content="Minimum: "></Label>
-                </Grid>
-                <Grid Name="MinTextBlockGrid1" Grid.Row="2" Grid.Column="1">
-                    <TextBlock Name="MinTextBlock1" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MaxLabelGrid1" Grid.Row="3" Grid.Column="0">
-                    <Label Name="MaxLabel1" Content="Maximum: "></Label>
-                </Grid>
-                <Grid Name="MaxTextBlockGrid1" Grid.Row="3" Grid.Column="1">
-                    <TextBlock Name="MaxTextBlock1" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="TimeLabelGrid1" Grid.Row="4" Grid.Column="0">
-                    <Label Name="TimeLabel1" Content="Tid: "></Label>
-                </Grid>
-                <Grid Name="TimeTextBlockGrid1" Grid.Row="4" Grid.Column="1">
-                    <TextBlock Name="TimeTextBlock1" Text=""></TextBlock>
-                </Grid>
-            </Grid>
-        </Grid>
-        <Grid Name="GameAndBoardGrid2" Grid.Row="1" Visibility="Hidden" Margin="10,0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid Name="GameGrid2" Grid.Column="0" ShowGridLines="True">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-            </Grid>
-            <Grid Name="ScoreBoardGrid2" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid Name="AlgLabelGrid2" Grid.Row="0" Grid.Column="0">
-                    <Label Name="AlgLabel2" Content="Algoritme: "></Label>
-                </Grid>
-                <Grid Name="AlgTextBlockGrid2" Grid.Row="0" Grid.Column="1">
-                    <TextBlock Name="AlgTextBlock2" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MedianLabelGrid2" Grid.Row="1" Grid.Column="0">
-                    <Label Name="MedianLabel2" Content="Median: "></Label>
-                </Grid>
-                <Grid Name="MedianTextBlockGrid2" Grid.Row="1" Grid.Column="1">
-                    <TextBlock Name="MedianTextBlock2" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MinLabelGrid2" Grid.Row="2" Grid.Column="0">
-                    <Label Name="MinLabel2" Content="Minimum: "></Label>
-                </Grid>
-                <Grid Name="MinTextBlockGrid2" Grid.Row="2" Grid.Column="1">
-                    <TextBlock Name="MinTextBlock2" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MaxLabelGrid2" Grid.Row="3" Grid.Column="0">
-                    <Label Name="MaxLabel2" Content="Maximum: "></Label>
-                </Grid>
-                <Grid Name="MaxTextBlockGrid2" Grid.Row="3" Grid.Column="1">
-                    <TextBlock Name="MaxTextBlock2" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="TimeLabelGrid2" Grid.Row="4" Grid.Column="0">
-                    <Label Name="TimeLabel2" Content="Tid: "></Label>
-                </Grid>
-                <Grid Name="TimeTextBlockGrid2" Grid.Row="4" Grid.Column="1">
-                    <TextBlock Name="TimeTextBlock2" Text=""></TextBlock>
-                </Grid>
-            </Grid>
-        </Grid>
-        <Grid Name="GameAndBoardGrid3" Grid.Row="2" Visibility="Hidden" Margin="10,0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid Name="GameGrid3" Grid.Column="0" ShowGridLines="True">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-            </Grid>
-            <Grid Name="ScoreBoardGrid3" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid Name="AlgLabelGrid3" Grid.Row="0" Grid.Column="0">
-                    <Label Name="AlgLabel3" Content="Algoritme: "></Label>
-                </Grid>
-                <Grid Name="AlgTextBlockGrid3" Grid.Row="0" Grid.Column="1">
-                    <TextBlock Name="AlgTextBlock3" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MedianLabelGrid3" Grid.Row="1" Grid.Column="0">
-                    <Label Name="MedianLabel3" Content="Median: "></Label>
-                </Grid>
-                <Grid Name="MedianTextBlockGrid3" Grid.Row="1" Grid.Column="1">
-                    <TextBlock Name="MedianTextBlock3" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MinLabelGrid3" Grid.Row="2" Grid.Column="0">
-                    <Label Name="MinLabel3" Content="Minimum: "></Label>
-                </Grid>
-                <Grid Name="MinTextBlockGrid3" Grid.Row="2" Grid.Column="1">
-                    <TextBlock Name="MinTextBlock3" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MaxLabelGrid3" Grid.Row="3" Grid.Column="0">
-                    <Label Name="MaxLabel3" Content="Maximum: "></Label>
-                </Grid>
-                <Grid Name="MaxTextBlockGrid3" Grid.Row="3" Grid.Column="1">
-                    <TextBlock Name="MaxTextBlock3" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="TimeLabelGrid3" Grid.Row="4" Grid.Column="0">
-                    <Label Name="TimeLabel3" Content="Tid: "></Label>
-                </Grid>
-                <Grid Name="TimeTextBlockGrid3" Grid.Row="4" Grid.Column="1">
-                    <TextBlock Name="TimeTextBlock3" Text=""></TextBlock>
-                </Grid>
-            </Grid>
-        </Grid>
-        <Grid Name="GameAndBoardGrid4" Grid.Row="3" Visibility="Hidden" Margin="10,0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid Name="GameGrid4" Grid.Column="0" ShowGridLines="True">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-            </Grid>
-            <Grid Name="ScoreBoardGrid4" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid Name="AlgLabelGrid4" Grid.Row="0" Grid.Column="0">
-                    <Label Name="AlgLabel4" Content="Algoritme: "></Label>
-                </Grid>
-                <Grid Name="AlgTextBlockGrid4" Grid.Row="0" Grid.Column="1">
-                    <TextBlock Name="AlgTextBlock4" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MedianLabelGrid4" Grid.Row="1" Grid.Column="0">
-                    <Label Name="MedianLabel4" Content="Median: "></Label>
-                </Grid>
-                <Grid Name="MedianTextBlockGrid4" Grid.Row="1" Grid.Column="1">
-                    <TextBlock Name="MedianTextBlock4" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MinLabelGrid4" Grid.Row="2" Grid.Column="0">
-                    <Label Name="MinLabel4" Content="Minimum: "></Label>
-                </Grid>
-                <Grid Name="MinTextBlockGrid4" Grid.Row="2" Grid.Column="1">
-                    <TextBlock Name="MinTextBlock4" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="MaxLabelGrid4" Grid.Row="3" Grid.Column="0">
-                    <Label Name="MaxLabel4" Content="Maximum: "></Label>
-                </Grid>
-                <Grid Name="MaxTextBlockGrid4" Grid.Row="3" Grid.Column="1">
-                    <TextBlock Name="MaxTextBlock4" Text=""></TextBlock>
-                </Grid>
-                <Grid Name="TimeLabelGrid4" Grid.Row="4" Grid.Column="0">
-                    <Label Name="TimeLabel4" Content="Tid: "></Label>
-                </Grid>
-                <Grid Name="TimeTextBlockGrid4" Grid.Row="4" Grid.Column="1">
-                    <TextBlock Name="TimeTextBlock4" Text=""></TextBlock>
-                </Grid>
-            </Grid>
-        </Grid>
-        <Grid Name="GameSetupGrids">
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="310"></RowDefinition>
+                <RowDefinition Height="310"></RowDefinition>
+                <RowDefinition Height="310"></RowDefinition>
+                <RowDefinition Height="310"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid Name="GameSetupGrid1" Visibility="Hidden" Grid.Row="0" >
+            <Grid Name="GameAndBoardGrid1" Grid.Row="0" Visibility="Hidden">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Name="GameGrid1" Grid.Column="0" ShowGridLines="True" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <Grid Name="ScoreBoardGrid1" Grid.Column="1" Margin="0,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Name="AlgLabelGrid1" Grid.Row="0" Grid.Column="0">
+                        <Label Name="AlgLabel1" Content="Algoritme: "></Label>
+                    </Grid>
+                    <Grid Name="AlgTextBlockGrid1" Grid.Row="0" Grid.Column="1">
+                        <TextBlock Name="AlgTextBlock1" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MedianLabelGrid1" Grid.Row="1" Grid.Column="0">
+                        <Label Name="MedianLabel1" Content="Median: "></Label>
+                    </Grid>
+                    <Grid Name="MedianTextBlockGrid1" Grid.Row="1" Grid.Column="1">
+                        <TextBlock Name="MedianTextBlock1" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MinLabelGrid1" Grid.Row="2" Grid.Column="0">
+                        <Label Name="MinLabel1" Content="Minimum: "></Label>
+                    </Grid>
+                    <Grid Name="MinTextBlockGrid1" Grid.Row="2" Grid.Column="1">
+                        <TextBlock Name="MinTextBlock1" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MaxLabelGrid1" Grid.Row="3" Grid.Column="0">
+                        <Label Name="MaxLabel1" Content="Maximum: "></Label>
+                    </Grid>
+                    <Grid Name="MaxTextBlockGrid1" Grid.Row="3" Grid.Column="1">
+                        <TextBlock Name="MaxTextBlock1" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="TimeLabelGrid1" Grid.Row="4" Grid.Column="0">
+                        <Label Name="TimeLabel1" Content="Tid: "></Label>
+                    </Grid>
+                    <Grid Name="TimeTextBlockGrid1" Grid.Row="4" Grid.Column="1">
+                        <TextBlock Name="TimeTextBlock1" Text=""></TextBlock>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid Name="GameAndBoardGrid2" Grid.Row="1" Visibility="Hidden" Margin="10,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Name="GameGrid2" Grid.Column="0" ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <Grid Name="ScoreBoardGrid2" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Name="AlgLabelGrid2" Grid.Row="0" Grid.Column="0">
+                        <Label Name="AlgLabel2" Content="Algoritme: "></Label>
+                    </Grid>
+                    <Grid Name="AlgTextBlockGrid2" Grid.Row="0" Grid.Column="1">
+                        <TextBlock Name="AlgTextBlock2" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MedianLabelGrid2" Grid.Row="1" Grid.Column="0">
+                        <Label Name="MedianLabel2" Content="Median: "></Label>
+                    </Grid>
+                    <Grid Name="MedianTextBlockGrid2" Grid.Row="1" Grid.Column="1">
+                        <TextBlock Name="MedianTextBlock2" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MinLabelGrid2" Grid.Row="2" Grid.Column="0">
+                        <Label Name="MinLabel2" Content="Minimum: "></Label>
+                    </Grid>
+                    <Grid Name="MinTextBlockGrid2" Grid.Row="2" Grid.Column="1">
+                        <TextBlock Name="MinTextBlock2" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MaxLabelGrid2" Grid.Row="3" Grid.Column="0">
+                        <Label Name="MaxLabel2" Content="Maximum: "></Label>
+                    </Grid>
+                    <Grid Name="MaxTextBlockGrid2" Grid.Row="3" Grid.Column="1">
+                        <TextBlock Name="MaxTextBlock2" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="TimeLabelGrid2" Grid.Row="4" Grid.Column="0">
+                        <Label Name="TimeLabel2" Content="Tid: "></Label>
+                    </Grid>
+                    <Grid Name="TimeTextBlockGrid2" Grid.Row="4" Grid.Column="1">
+                        <TextBlock Name="TimeTextBlock2" Text=""></TextBlock>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid Name="GameAndBoardGrid3" Grid.Row="2" Visibility="Hidden" Margin="10,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Name="GameGrid3" Grid.Column="0" ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <Grid Name="ScoreBoardGrid3" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Name="AlgLabelGrid3" Grid.Row="0" Grid.Column="0">
+                        <Label Name="AlgLabel3" Content="Algoritme: "></Label>
+                    </Grid>
+                    <Grid Name="AlgTextBlockGrid3" Grid.Row="0" Grid.Column="1">
+                        <TextBlock Name="AlgTextBlock3" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MedianLabelGrid3" Grid.Row="1" Grid.Column="0">
+                        <Label Name="MedianLabel3" Content="Median: "></Label>
+                    </Grid>
+                    <Grid Name="MedianTextBlockGrid3" Grid.Row="1" Grid.Column="1">
+                        <TextBlock Name="MedianTextBlock3" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MinLabelGrid3" Grid.Row="2" Grid.Column="0">
+                        <Label Name="MinLabel3" Content="Minimum: "></Label>
+                    </Grid>
+                    <Grid Name="MinTextBlockGrid3" Grid.Row="2" Grid.Column="1">
+                        <TextBlock Name="MinTextBlock3" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MaxLabelGrid3" Grid.Row="3" Grid.Column="0">
+                        <Label Name="MaxLabel3" Content="Maximum: "></Label>
+                    </Grid>
+                    <Grid Name="MaxTextBlockGrid3" Grid.Row="3" Grid.Column="1">
+                        <TextBlock Name="MaxTextBlock3" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="TimeLabelGrid3" Grid.Row="4" Grid.Column="0">
+                        <Label Name="TimeLabel3" Content="Tid: "></Label>
+                    </Grid>
+                    <Grid Name="TimeTextBlockGrid3" Grid.Row="4" Grid.Column="1">
+                        <TextBlock Name="TimeTextBlock3" Text=""></TextBlock>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid Name="GameAndBoardGrid4" Grid.Row="3" Visibility="Hidden" Margin="10,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Name="GameGrid4" Grid.Column="0" ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <Grid Name="ScoreBoardGrid4" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Name="AlgLabelGrid4" Grid.Row="0" Grid.Column="0">
+                        <Label Name="AlgLabel4" Content="Algoritme: "></Label>
+                    </Grid>
+                    <Grid Name="AlgTextBlockGrid4" Grid.Row="0" Grid.Column="1">
+                        <TextBlock Name="AlgTextBlock4" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MedianLabelGrid4" Grid.Row="1" Grid.Column="0">
+                        <Label Name="MedianLabel4" Content="Median: "></Label>
+                    </Grid>
+                    <Grid Name="MedianTextBlockGrid4" Grid.Row="1" Grid.Column="1">
+                        <TextBlock Name="MedianTextBlock4" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MinLabelGrid4" Grid.Row="2" Grid.Column="0">
+                        <Label Name="MinLabel4" Content="Minimum: "></Label>
+                    </Grid>
+                    <Grid Name="MinTextBlockGrid4" Grid.Row="2" Grid.Column="1">
+                        <TextBlock Name="MinTextBlock4" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="MaxLabelGrid4" Grid.Row="3" Grid.Column="0">
+                        <Label Name="MaxLabel4" Content="Maximum: "></Label>
+                    </Grid>
+                    <Grid Name="MaxTextBlockGrid4" Grid.Row="3" Grid.Column="1">
+                        <TextBlock Name="MaxTextBlock4" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="TimeLabelGrid4" Grid.Row="4" Grid.Column="0">
+                        <Label Name="TimeLabel4" Content="Tid: "></Label>
+                    </Grid>
+                    <Grid Name="TimeTextBlockGrid4" Grid.Row="4" Grid.Column="1">
+                        <TextBlock Name="TimeTextBlock4" Text=""></TextBlock>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid Name="GameSetupGrids">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <ComboBox Name="GameSetupSelection1" AllowDrop="True" Height="24" HorizontalAlignment="Left" Grid.Row="0">
+                <Grid Name="GameSetupGrid1" Visibility="Hidden" Grid.Row="0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ComboBox Name="GameSetupSelection1" AllowDrop="True" Height="24" HorizontalAlignment="Left" Grid.Row="0">
 
-                </ComboBox>
-                <TextBox Grid.Row="1"></TextBox>
+                    </ComboBox>
+                    <TextBox Grid.Row="1"></TextBox>
+                </Grid>
+                <Grid Name="GameSetupGrid2" Visibility="Hidden" Grid.Row="1" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ComboBox Name="GameSetupSelection2" AllowDrop="True" Height="24" HorizontalAlignment="Left" Grid.Row="0">
+
+                    </ComboBox>
+                    <TextBox Grid.Row="1"></TextBox>
+                </Grid>
+                <Grid Name="GameSetupGrid3" Visibility="Hidden" Grid.Row="2" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ComboBox Name="GameSetupSelection3" AllowDrop="True" Height="24" HorizontalAlignment="Left" Grid.Row="0">
+
+                    </ComboBox>
+                    <TextBox Grid.Row="1"></TextBox>
+                </Grid>
+                <Grid Name="GameSetupGrid4" Visibility="Hidden" Grid.Row="3" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ComboBox Name="GameSetupSelection4" AllowDrop="True" Height="24" HorizontalAlignment="Left" Grid.Row="0">
+
+                    </ComboBox>
+                    <TextBox Grid.Row="1"></TextBox>
+                </Grid>
+                <Button Name="BeginGame" Click="BeginGame_Click" Grid.Row="4" Visibility="Hidden" Width="100" Height="30" HorizontalAlignment="Left">Start spil</Button>
             </Grid>
-            <Grid Name="GameSetupGrid2" Visibility="Hidden" Grid.Row="1" >
+            <Grid Name="GameInitiationGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <ComboBox Name="GameSetupSelection2" AllowDrop="True" Height="24" HorizontalAlignment="Left" Grid.Row="0">
-
-                </ComboBox>
-                <TextBox Grid.Row="1"></TextBox>
-            </Grid>
-            <Grid Name="GameSetupGrid3" Visibility="Hidden" Grid.Row="2" >
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <ComboBox Name="GameSetupSelection3" AllowDrop="True" Height="24" HorizontalAlignment="Left" Grid.Row="0">
-
-                </ComboBox>
-                <TextBox Grid.Row="1"></TextBox>
+                <Grid Grid.Row="0">
+                    <Label FontSize="24">Vælg antal spil</Label>
+                </Grid>
+                <Grid Grid.Row="1" Width="Auto">
+                    <ComboBox Name="InitiationDropdown" AllowDrop="True" Height="24" SelectedValuePath="Tag" Margin="0" HorizontalAlignment="Left">
+                        <ComboBoxItem IsSelected="True" Tag="1">1 Spil</ComboBoxItem>
+                        <ComboBoxItem Tag="2">2 Spil</ComboBoxItem>
+                        <ComboBoxItem Tag="3">3 Spil</ComboBoxItem>
+                        <ComboBoxItem Tag="4">4 Spil</ComboBoxItem>
+                    </ComboBox>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Button Name="InitiateButton" Click="InitiateButton_Click" Width="100" Height="30" HorizontalAlignment="Left">Gå til setup</Button>
+                </Grid>
             </Grid>
-            <Grid Name="GameSetupGrid4" Visibility="Hidden" Grid.Row="3" >
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <ComboBox Name="GameSetupSelection4" AllowDrop="True" Height="24" HorizontalAlignment="Left" Grid.Row="0">
-
-                </ComboBox>
-                <TextBox Grid.Row="1"></TextBox>
-            </Grid>
-            <Button Name="BeginGame" Click="BeginGame_Click" Grid.Row="4" Visibility="Hidden" Width="100" Height="30" HorizontalAlignment="Left">Start spil</Button>
         </Grid>
-        <Grid Name="GameInitiationGrid">
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Label FontSize="24">Vælg antal spil</Label>
-            </Grid>
-            <Grid Grid.Row="1" Width="Auto">
-                <ComboBox Name="InitiationDropdown" AllowDrop="True" Height="24" SelectedValuePath="Tag" Margin="0" HorizontalAlignment="Left">
-                    <ComboBoxItem IsSelected="True" Tag="1">1 Spil</ComboBoxItem>
-                    <ComboBoxItem Tag="2">2 Spil</ComboBoxItem>
-                    <ComboBoxItem Tag="3">3 Spil</ComboBoxItem>
-                    <ComboBoxItem Tag="4">4 Spil</ComboBoxItem>
-                </ComboBox>
-            </Grid>
-            <Grid Grid.Row="2">
-                <Button Name="InitiateButton" Click="InitiateButton_Click" Width="100" Height="30" HorizontalAlignment="Left">Gå til setup</Button>
-            </Grid>
-        </Grid>
-    </Grid>
+    </ScrollViewer>
 </Window>
