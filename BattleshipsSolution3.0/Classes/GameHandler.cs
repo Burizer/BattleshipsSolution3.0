@@ -25,18 +25,20 @@ namespace BattleshipsSolution3._0.Classes
         private List<int> _hitList = new List<int>();
         private List<int> _totalShots = new List<int>();
         private List<string> _shipTypeList = new List<string>();
-        private Dictionary<int,string> _hitCoordinateAndType;
+        private Dictionary<int, string> _hitCoordinateAndType;
         private static readonly Object lockObj = new Object();
         private string _algorithmName = "";
         private int _shotsAverage = 0;
         private int _shotsMinimum = 0;
         private int _shotsMaximum = 0;
         private string _timeElapsed = "";
+        private string _timeAverage = "";
         private TextBlock _algorithmNameBlock;
         private TextBlock _shotsAverageBlock;
         private TextBlock _shotsMinimumBlock;
         private TextBlock _shotsMaximumBlock;
         private TextBlock _timeElapsedBlock;
+        private TextBlock _timeAverageBlock;
         #endregion
         #region Constructor
         public GameHandler(IBaseAI gameAi, Grid gameAndBoardGrid, int iterations)
@@ -179,7 +181,8 @@ namespace BattleshipsSolution3._0.Classes
             _shotsMinimumBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[5], 0) as TextBlock;
             _shotsMaximumBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[7], 0) as TextBlock;
             _timeElapsedBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[9], 0) as TextBlock;
-            
+            _timeAverageBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[11], 0) as TextBlock;
+
         }
 
         private void GameGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -193,45 +196,49 @@ namespace BattleshipsSolution3._0.Classes
             gameTimer = DateTime.Now;
             for (int i = 0; i < iterations; i++)
             {
-                int shotsFired = 0;
-                _ships = new Shiplist();
-                _hitCoordinateAndType = new Dictionary<int, string>();
-                _gameGrid.Children.Clear();
-                PopulateGrids();
-                PlaceShips(_ships);
-                while (!GameWon)
-                {
-                    lock (lockObj)
-                    {
-                        _gameAi.GameGrid = _gameGrid;
-                        _gameAi.HitList = _hitList;
-                    }
-                    int checkHitValue = _gameAi.Coordinate;
-                    CheckHit(checkHitValue);
-                    shotsFired++;
-                }
-                _totalShots.Add(shotsFired);
-                _shotsAverage = _totalShots.Sum() / _totalShots.Count;
-                if (i == 0 || shotsFired < _shotsMinimum)
-                {
-                    _shotsMinimum = shotsFired;
-                }
-                if (shotsFired > _shotsMaximum)
-                {
-                    _shotsMaximum = shotsFired;
-                }
+                Turn(i);
             }
             TimeSpan gameEndTimer = new TimeSpan();
             gameEndTimer = DateTime.Now - gameTimer;
             _timeElapsed = gameEndTimer.ToString();
-            //_timeElapsed = gameEndTimer.TotalMinutes + ":" + gameEndTimer.TotalSeconds + ":" + gameEndTimer.TotalMilliseconds;
+            _timeElapsedBlock.Text = _timeElapsed;
+            long averageTime = gameEndTimer.Ticks / iterations;
+            TimeSpan averageSpan = TimeSpan.FromTicks(averageTime);
+            _timeAverage = averageSpan.ToString();
+            _timeAverageBlock.Text = _timeAverage;
+        }
+        private void Turn(int loopVar)
+        {
+            int shotsFired = 0;
+            _ships = new Shiplist();
+            _hitCoordinateAndType = new Dictionary<int, string>();
+            _gameGrid.Children.Clear();
+            PopulateGrids();
+            PlaceShips(_ships);
+            while (!GameWon)
+            {
+                _gameAi.GameGrid = _gameGrid;
+                _gameAi.HitList = _hitList;
+                int checkHitValue = _gameAi.Coordinate;
+                CheckHit(checkHitValue);
+                shotsFired++;
+            }
+            _totalShots.Add(shotsFired);
+            _shotsAverage = _totalShots.Sum() / _totalShots.Count;
+            if (loopVar == 0 || shotsFired < _shotsMinimum)
+            {
+                _shotsMinimum = shotsFired;
+            }
+            if (shotsFired > _shotsMaximum)
+            {
+                _shotsMaximum = shotsFired;
+            }
+
             string[] typeNameSplit = _gameAi.GetType().ToString().Split(Convert.ToChar("."));
             _algorithmNameBlock.Text = typeNameSplit[3];
             _shotsAverageBlock.Text = _shotsAverage.ToString();
             _shotsMinimumBlock.Text = _shotsMinimum.ToString();
             _shotsMaximumBlock.Text = _shotsMaximum.ToString();
-            _timeElapsedBlock.Text = _timeElapsed;
-
         }
         public void PlaceShips(Shiplist shipList)
         {
@@ -240,7 +247,7 @@ namespace BattleshipsSolution3._0.Classes
                 ValidateShipPlacement(item);
             }
         }
-        public void ValidateShipPlacement(Ship ship)
+        private void ValidateShipPlacement(Ship ship)
         {
             bool placementValid = false;
             int placeMentIndexer = 0;
@@ -402,12 +409,12 @@ namespace BattleshipsSolution3._0.Classes
             else
             {
                 _hitList.Add(coord);
-                _hitCoordinateAndType.Add(coord,hitGrid.Tag.ToString());
+                _hitCoordinateAndType.Add(coord, hitGrid.Tag.ToString());
                 foreach (Ship item in _ships.Ships)
                 {
                     if (item.Name == hitGrid.Tag.ToString())
                     {
-                        item.Hits--;
+                        item.HitRegistered();
                         if (item.IsSunk)
                         {
                             shipIsSunk = true;

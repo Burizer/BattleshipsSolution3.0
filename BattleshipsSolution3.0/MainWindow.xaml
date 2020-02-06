@@ -56,6 +56,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -90,6 +91,12 @@
                     </Grid>
                     <Grid Name="TimeTextBlockGrid1" Grid.Row="4" Grid.Column="1">
                         <TextBlock Name="TimeTextBlock1" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="AverageTimeLabelGrid1" Grid.Row="5" Grid.Column="0">
+                        <Label Name="AverageTimeLabel1" Content="Per spil: "></Label>
+                    </Grid>
+                    <Grid Name="AverageTimeTextBlockGrid1" Grid.Row="5" Grid.Column="1">
+                        <TextBlock Name="AverageTimeTextBlock1" Text=""></TextBlock>
                     </Grid>
                 </Grid>
             </Grid>
@@ -131,6 +138,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -165,6 +173,12 @@
                     </Grid>
                     <Grid Name="TimeTextBlockGrid2" Grid.Row="4" Grid.Column="1">
                         <TextBlock Name="TimeTextBlock2" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="AverageTimeLabelGrid2" Grid.Row="5" Grid.Column="0">
+                        <Label Name="AverageTimeLabel2" Content="Per spil: "></Label>
+                    </Grid>
+                    <Grid Name="AverageTimeTextBlockGrid2" Grid.Row="5" Grid.Column="1">
+                        <TextBlock Name="AverageTimeTextBlock2" Text=""></TextBlock>
                     </Grid>
                 </Grid>
             </Grid>
@@ -206,6 +220,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -240,6 +255,12 @@
                     </Grid>
                     <Grid Name="TimeTextBlockGrid3" Grid.Row="4" Grid.Column="1">
                         <TextBlock Name="TimeTextBlock3" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="AverageTimeLabelGrid3" Grid.Row="5" Grid.Column="0">
+                        <Label Name="AverageTimeLabel3" Content="Per spil: "></Label>
+                    </Grid>
+                    <Grid Name="AverageTimeTextBlockGrid3" Grid.Row="5" Grid.Column="1">
+                        <TextBlock Name="AverageTimeTextBlock3" Text=""></TextBlock>
                     </Grid>
                 </Grid>
             </Grid>
@@ -281,6 +302,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -315,6 +337,12 @@
                     </Grid>
                     <Grid Name="TimeTextBlockGrid4" Grid.Row="4" Grid.Column="1">
                         <TextBlock Name="TimeTextBlock4" Text=""></TextBlock>
+                    </Grid>
+                    <Grid Name="AverageTimeLabelGrid4" Grid.Row="5" Grid.Column="0">
+                        <Label Name="AverageTimeLabel4" Content="Per spil: "></Label>
+                    </Grid>
+                    <Grid Name="AverageTimeTextBlockGrid4" Grid.Row="5" Grid.Column="1">
+                        <TextBlock Name="AverageTimeTextBlock4" Text=""></TextBlock>
                     </Grid>
                 </Grid>
             </Grid>
