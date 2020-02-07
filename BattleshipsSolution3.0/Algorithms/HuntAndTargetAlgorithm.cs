@@ -18,7 +18,6 @@ namespace BattleshipsSolution3._0.Algorithms
         private List<int> _hitList = new List<int>();
         private static Random _random = new Random();
         private HuntAlgorithm _hunt;
-        private int randomHit = -1;
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
         #endregion
         #region Constructor
@@ -31,20 +30,19 @@ namespace BattleshipsSolution3._0.Algorithms
         {
             get
             {
+                bool viableHit = false;
+                int randomHit = -1;
+
                 if (_hitList.Count != 0)
                 {
                     _hunt.GameGrid = _gameGrid;
                     _hunt.HitList = _hitList;
                     return _hunt.Coordinate;
                 }
-                randomHit = 0;
-                Grid targetGrid = new Grid();
-                targetGrid.Tag = "";
-                bool viableHit = false;
                 while (!viableHit)
                 {
                     randomHit = _random.Next(0, 99);
-                    targetGrid = _gameGrid.Children[randomHit] as Grid;
+                    Grid targetGrid = _gameGrid.Children[randomHit] as Grid;
                     if (targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString()))
                     {
                         viableHit = true;

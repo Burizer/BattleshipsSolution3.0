@@ -234,16 +234,20 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                         return tryVertical[tryVertical.Count - 1] + 10;
                     }
                 }
-                foreach (int item in _hitList)
+                else
                 {
-                    int shot = -1;
-                    shot = ValidateShot(item);
-                    if (shot != -1)
+                    foreach (int item in _hitList)
                     {
-                        return shot;
+                        int shot = -1;
+                        shot = ValidateShot(item);
+                        if (shot != -1)
+                        {
+                            return shot;
+                        }
                     }
+                    #endregion
+                    return -1;
                 }
-                #endregion
                 return -1;
             }
         }
@@ -307,24 +311,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             {
                 return coordinate - 1;
             }
-            int randShot = 0;
-            bool randShotViable = false;
-            while (!randShotViable)
-            {
-                Grid targetGrid = new Grid();
-                targetGrid.Tag = "";
-                randShot = _random.Next(0, 99);
-                try
-                {
-                    targetGrid = _gameGrid.Children[randShot] as Grid;
-                }
-                catch { }
-                if (targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString()))
-                {
-                    randShotViable = true;
-                }
-            }
-            return randShot;
+            return -1;
         }
         #endregion
         #region OnPropertyChanged code

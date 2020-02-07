@@ -304,6 +304,10 @@ namespace BattleshipsSolution3._0.Classes
                                 }
                                 squaresValidated++;
                             }
+                            if (squaresValidated == ship.Length)
+                            {
+                                placementValid = true;
+                            }
                             break;
                         ///East
                         case 2:
@@ -323,11 +327,15 @@ namespace BattleshipsSolution3._0.Classes
                                         break;
                                     }
                                 }
-                                if (i != 0 && ((shipStartIndex + (placeMentIndexer * i)) % 10 == 0 || shipLengthGrid.Tag.ToString() != "Water"))
+                                if (i != 0 && ((shipStartIndex + (placeMentIndexer * i)) % 10 != 0 || shipLengthGrid.Tag.ToString() != "Water"))
                                 {
                                     break;
                                 }
                                 squaresValidated++;
+                            }
+                            if (squaresValidated == ship.Length)
+                            {
+                                placementValid = true;
                             }
                             break;
                         ///South
@@ -354,6 +362,10 @@ namespace BattleshipsSolution3._0.Classes
                                 }
                                 squaresValidated++;
                             }
+                            if (squaresValidated == ship.Length)
+                            {
+                                placementValid = true;
+                            }
                             break;
                         ///West
                         case 4:
@@ -379,26 +391,19 @@ namespace BattleshipsSolution3._0.Classes
                                 }
                                 squaresValidated++;
                             }
+                            if (squaresValidated == ship.Length)
+                            {
+                                placementValid = true;
+                            }
                             break;
                     }
-                    if (squaresValidated == ship.Length)
-                    {
-                        placementValid = true;
-                    }
                 }
             }
-            if (!placementValid)
+            for (int i = 0; i < ship.Length; i++)
             {
-                return;
-            }
-            else
-            {
-                for (int i = 0; i < ship.Length; i++)
-                {
-                    Grid selectedGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Grid;
-                    selectedGrid.Tag = ship.Name;
-                    selectedGrid.Background = new SolidColorBrush(Colors.SandyBrown);
-                }
+                Grid selectedGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Grid;
+                selectedGrid.Tag = ship.Name;
+                selectedGrid.Background = new SolidColorBrush(Colors.SandyBrown);
             }
         }
         private void CheckHit(int coord)
