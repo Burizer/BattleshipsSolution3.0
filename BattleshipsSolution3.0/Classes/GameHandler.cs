@@ -48,7 +48,8 @@ namespace BattleshipsSolution3._0.Classes
             _gameAi.HitList = _hitList;
             _gameGrid = VisualTreeHelper.GetChild(_gameAndBoardGrid, 0) as Grid;
             _scoreGrid = VisualTreeHelper.GetChild(_gameAndBoardGrid, 1) as Grid;
-            PopulateGrids();
+            //PopulateGrids();
+            //PlaceShips(new Shiplist());
             SetScoreBoardControls();
             PlayGame(iterations);
         }
@@ -166,7 +167,8 @@ namespace BattleshipsSolution3._0.Classes
                     newGrid.SetValue(Grid.ColumnProperty, x);
                     newGrid.Width = 30;
                     newGrid.Height = 30;
-                    newGrid.Tag = "";
+                    newGrid.Tag = "Water";
+                    newGrid.Background = new SolidColorBrush(Colors.AliceBlue);
                     newGrid.MouseDown += GameGrid_MouseDown;
                     _gameGrid.Children.Add(newGrid);
                 }
@@ -210,7 +212,8 @@ namespace BattleshipsSolution3._0.Classes
             int shotsFired = 0;
             _ships = new Shiplist();
             _hitCoordinateAndType = new Dictionary<int, string>();
-            ResetGameGridToStart();
+            _gameGrid.Children.Clear();
+            PopulateGrids();
             PlaceShips(_ships);
             while (!GameWon)
             {
@@ -237,21 +240,7 @@ namespace BattleshipsSolution3._0.Classes
             _shotsMinimumBlock.Text = _shotsMinimum.ToString();
             _shotsMaximumBlock.Text = _shotsMaximum.ToString();
         }
-
-        private void ResetGameGridToStart()
-        {
-            foreach (Grid item in _gameGrid.Children)
-            {
-                if (item.Tag.ToString() != "Water")
-                {
-                    item.Tag = "Water";
-                    item.Background = new SolidColorBrush(Colors.AliceBlue);
-                }
-            }
-
-        }
-
-        private void PlaceShips(Shiplist shipList)
+        public void PlaceShips(Shiplist shipList)
         {
             foreach (Ship item in shipList.Ships)
             {
@@ -406,7 +395,7 @@ namespace BattleshipsSolution3._0.Classes
                 selectedGrid.Background = new SolidColorBrush(Colors.SandyBrown);
             }
         }
-        private void CheckHit(int coord)
+        public void CheckHit(int coord)
         {
             bool shipIsSunk = false;
             Grid hitGrid = new Grid();
