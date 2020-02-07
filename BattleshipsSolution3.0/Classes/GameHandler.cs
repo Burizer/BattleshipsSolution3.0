@@ -268,7 +268,7 @@ namespace BattleshipsSolution3._0.Classes
                 Grid gridVar = new Grid();
                 gridVar.Tag = "";
                 int squaresValidated;
-                shipStartIndex = _random.Next(0, 100);
+                shipStartIndex = _random.Next(0, 99);
                 try
                 {
                     gridVar = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex) as Grid;
@@ -277,7 +277,7 @@ namespace BattleshipsSolution3._0.Classes
                 if (gridVar.Tag.ToString() == "Water")
                 {
                     squaresValidated = 0;
-                    int direction = _random.Next(1, 5);
+                    int direction = _random.Next(1, 4);
                     switch (direction)
                     {
                         ///North

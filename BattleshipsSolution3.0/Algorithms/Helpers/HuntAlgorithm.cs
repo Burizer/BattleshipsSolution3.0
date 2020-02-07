@@ -111,7 +111,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     }
                     if (potentialHits.Count != 0)
                     {
-                        int direction = potentialHits[_random.Next(0, potentialHits.Count)];
+                        int direction = potentialHits[_random.Next(0, potentialHits.Count - 1)];
                         switch (direction)
                         {
                             case 1:
@@ -313,7 +313,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             {
                 Grid targetGrid = new Grid();
                 targetGrid.Tag = "";
-                randShot = _random.Next(0, 100);
+                randShot = _random.Next(0, 99);
                 try
                 {
                     targetGrid = _gameGrid.Children[randShot] as Grid;
