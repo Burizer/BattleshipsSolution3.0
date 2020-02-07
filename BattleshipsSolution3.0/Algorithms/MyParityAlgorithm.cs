@@ -33,6 +33,11 @@ namespace BattleshipsSolution3._0.Algorithms
         {
             get
             {
+                Grid firstHitGrid = _gameGrid.Children[1] as Grid;
+                if (firstHitGrid.Tag.ToString() == "Water")
+                {
+                    _counter = 0;
+                }
                 if (_hitList.Count != 0)
                 {
                     _hunt.GameGrid = _gameGrid;
@@ -48,7 +53,7 @@ namespace BattleshipsSolution3._0.Algorithms
                     while (!viableHit)
                     {
                         _counter += 2;
-                        if (_counter % 20 < 11)
+                        if (_counter % 20 < 11 && _counter % 20 != 0)
                         {
                             try
                             {
@@ -74,7 +79,7 @@ namespace BattleshipsSolution3._0.Algorithms
                         }
                     }
 
-                    if (_counter % 20 < 11)
+                    if (_counter % 20 < 11 && _counter % 20 != 0)
                     {
                         return _counter - 1;
                     }

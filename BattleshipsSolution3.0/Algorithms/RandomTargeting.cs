@@ -31,12 +31,14 @@ namespace BattleshipsSolution3._0.Algorithms
         {
             get
             {
+                Grid targetGrid = new Grid();
+                targetGrid.Tag = "";
                 bool viableHit = false;
                 int randomHit = -1;
                 while (!viableHit)
                 {
                     randomHit = _random.Next(0, 99);
-                    Grid targetGrid = _gameGrid.Children[randomHit] as Grid;
+                    targetGrid = _gameGrid.Children[randomHit] as Grid;
                     if (targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString()))
                     {
                         viableHit = true;
