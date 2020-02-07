@@ -43,7 +43,7 @@ namespace BattleshipsSolution3._0.Algorithms
                 bool viableHit = false;
                 while (!viableHit)
                 {
-                    randomHit = _random.Next(0, 99);
+                    randomHit = _random.Next(0, 100);
                     targetGrid = _gameGrid.Children[randomHit] as Grid;
                     if (targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString()))
                     {
