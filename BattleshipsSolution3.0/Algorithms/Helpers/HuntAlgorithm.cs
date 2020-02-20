@@ -15,43 +15,36 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
         #region Instance fields
         private Random _random = new Random();
         private List<int> _hitList;
-        private Grid _gameGrid;
+        private Dictionary<int, string> _gridDictionary;
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
-        private static readonly Object lockObj = new object();
         #endregion
         #region Constructor
-        public HuntAlgorithm(List<int> hitList, Grid gameGrid)
+        public HuntAlgorithm(List<int> hitList, Dictionary<int, string> gridDictionary)
         {
             _hitList = hitList;
-            _gameGrid = gameGrid;
+            _gridDictionary = gridDictionary;
+        }
+        public HuntAlgorithm()
+        {
+
         }
         #endregion
         #region Properties
         public List<int> HitList
         {
-            get
-            {
-                lock (lockObj)
-                { return _hitList; }
-            }
+            get { return _hitList; }
             set
             {
                 _hitList = value;
                 OnPropertyChanged();
             }
         }
-        public Grid GameGrid
+        public Dictionary<int, string> GridDictionary
         {
-            get
-            {
-                lock (lockObj)
-                {
-                    return _gameGrid;
-                }
-            }
+            get { return _gridDictionary; }
             set
             {
-                _gameGrid = value;
+                _gridDictionary = value;
                 OnPropertyChanged();
             }
         }
@@ -65,53 +58,49 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                 {
                     int currentGrid = _hitList[0];
                     List<int> potentialHits = new List<int>();
-                    Grid targetGridNorth = new Grid();
-                    targetGridNorth.Tag = "";
-                    Grid targetGridEast = new Grid();
-                    targetGridEast.Tag = "";
-                    Grid targetGridSouth = new Grid();
-                    targetGridSouth.Tag = "";
-                    Grid targetGridWest = new Grid();
-                    targetGridWest.Tag = "";
+                    string targetGridNorth = "";
+                    string targetGridEast = "";
+                    string targetGridSouth = "";
+                    string targetGridWest = "";
                     try
                     {
-                        targetGridNorth = _gameGrid.Children[currentGrid - 10] as Grid;
+                        targetGridNorth = _gridDictionary[currentGrid - 10];
                     }
                     catch { }
                     try
                     {
-                        targetGridEast = _gameGrid.Children[currentGrid + 1] as Grid;
+                        targetGridEast = _gridDictionary[currentGrid + 1];
                     }
                     catch { }
                     try
                     {
-                        targetGridSouth = _gameGrid.Children[currentGrid + 10] as Grid;
+                        targetGridSouth = _gridDictionary[currentGrid + 10];
                     }
                     catch { }
                     try
                     {
-                        targetGridWest = _gameGrid.Children[currentGrid - 1] as Grid;
+                        targetGridWest = _gridDictionary[currentGrid - 1];
                     }
                     catch { }
-                    if (targetGridNorth.Tag.ToString() == "Water" || shipNames.Contains(targetGridNorth.Tag.ToString()))
+                    if (targetGridNorth == "Water" || shipNames.Contains(targetGridNorth))
                     {
                         potentialHits.Add(1);
                     }
-                    if ((targetGridEast.Tag.ToString() == "Water" || shipNames.Contains(targetGridEast.Tag.ToString())) && currentGrid + 1 % 10 != 0)
+                    if ((targetGridEast == "Water" || shipNames.Contains(targetGridEast)) && currentGrid + 1 % 10 != 0)
                     {
                         potentialHits.Add(2);
                     }
-                    if (targetGridSouth.Tag.ToString() == "Water" || shipNames.Contains(targetGridSouth.Tag.ToString()))
+                    if (targetGridSouth == "Water" || shipNames.Contains(targetGridSouth))
                     {
                         potentialHits.Add(3);
                     }
-                    if ((targetGridWest.Tag.ToString() == "Water" || shipNames.Contains(targetGridWest.Tag.ToString())) && currentGrid - 1 % 10 != 1)
+                    if ((targetGridWest == "Water" || shipNames.Contains(targetGridWest)) && currentGrid - 1 % 10 != 1)
                     {
                         potentialHits.Add(4);
                     }
                     if (potentialHits.Count != 0)
                     {
-                        int direction = potentialHits[_random.Next(0, potentialHits.Count - 1)];
+                        int direction = potentialHits[_random.Next(potentialHits.Count)];
                         switch (direction)
                         {
                             case 1:
@@ -166,19 +155,23 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                         break;
                     }
                 }
-                Grid gameGridChildEast = new Grid();
-                gameGridChildEast.Tag = "";
-                Grid gameGridChildWest = new Grid();
-                gameGridChildWest.Tag = "";
-                Grid gameGridChildNorth = new Grid();
-                gameGridChildNorth.Tag = "";
-                Grid gameGridChildSouth = new Grid();
-                gameGridChildSouth.Tag = "";
+                string gameGridChildEast = "";
+                string gameGridChildWest = "";
+                string gameGridChildNorth = "";
+                string gameGridChildSouth = "";
+                //Grid gameGridChildEast = new Grid();
+                //gameGridChildEast.Tag = "";
+                //Grid gameGridChildWest = new Grid();
+                //gameGridChildWest.Tag = "";
+                //Grid gameGridChildNorth = new Grid();
+                //gameGridChildNorth.Tag = "";
+                //Grid gameGridChildSouth = new Grid();
+                //gameGridChildSouth.Tag = "";
                 try
                 {
                     if ((tryHorizontal[tryHorizontal.Count - 1] + 1) % 10 != 0)
                     {
-                        gameGridChildEast = _gameGrid.Children[tryHorizontal[tryHorizontal.Count - 1] + 1] as Grid;
+                        gameGridChildEast = _gridDictionary[tryHorizontal[tryHorizontal.Count - 1] + 1];
                     }
                 }
                 catch
@@ -188,7 +181,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                 {
                     if ((tryHorizontal[0] - 1) % 10 != 1)
                     {
-                        gameGridChildWest = _gameGrid.Children[tryHorizontal[0] - 1] as Grid;
+                        gameGridChildWest = _gridDictionary[tryHorizontal[0] - 1];
                     }
                 }
                 catch
@@ -196,40 +189,40 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                 }
                 try
                 {
-                    gameGridChildNorth = _gameGrid.Children[tryVertical[0] - 10] as Grid;
+                    gameGridChildNorth = _gridDictionary[tryVertical[0] - 10];
                 }
                 catch
                 {
                 }
                 try
                 {
-                    gameGridChildSouth = _gameGrid.Children[tryVertical[tryVertical.Count - 1] + 10] as Grid;
+                    gameGridChildSouth = _gridDictionary[tryVertical[tryVertical.Count - 1] + 10];
                 }
                 catch
                 {
                 }
-                if ((gameGridChildNorth.Tag.ToString() == "Water" || shipNames.Contains(gameGridChildNorth.ToString())) || (gameGridChildEast.Tag.ToString() == "Water" || shipNames.Contains(gameGridChildEast.ToString())) || (gameGridChildSouth.Tag.ToString() == "Water" || shipNames.Contains(gameGridChildSouth.ToString())) || (gameGridChildWest.Tag.ToString() == "Water" || shipNames.Contains(gameGridChildWest.ToString())))
+                if ((gameGridChildNorth == "Water" || shipNames.Contains(gameGridChildNorth.ToString())) || (gameGridChildEast == "Water" || shipNames.Contains(gameGridChildEast.ToString())) || (gameGridChildSouth == "Water" || shipNames.Contains(gameGridChildSouth)) || (gameGridChildWest == "Water" || shipNames.Contains(gameGridChildWest)))
                 {
                     //East
 
-                    if (tryHorizontal.Count > 1 && (gameGridChildEast.Tag.ToString() == "Water" || shipNames.Contains(gameGridChildEast.Tag.ToString())) && ((_hitList[_hitList.Count] - 1) + 1) % 10 != 0)
+                    if (tryHorizontal.Count > 1 && (gameGridChildEast == "Water" || shipNames.Contains(gameGridChildEast)) && ((_hitList[_hitList.Count] - 1) + 1) % 10 != 0)
                     {
                         return tryHorizontal[tryHorizontal.Count - 1] + 1;
                     }
                     //West
 
-                    if (tryHorizontal.Count > 1 && (gameGridChildWest.Tag.ToString() == "Water" || shipNames.Contains(gameGridChildWest.Tag.ToString())) && (_hitList[0] - 1) % 10 != 1)
+                    if (tryHorizontal.Count > 1 && (gameGridChildWest == "Water" || shipNames.Contains(gameGridChildWest)) && (_hitList[0] - 1) % 10 != 1)
                     {
                         return tryHorizontal[0] - 1;
                     }
                     //North
-                    if (tryVertical.Count > 1 && (gameGridChildNorth.Tag.ToString() == "Water" || shipNames.Contains(gameGridChildNorth.Tag.ToString())))
+                    if (tryVertical.Count > 1 && (gameGridChildNorth == "Water" || shipNames.Contains(gameGridChildNorth)))
                     {
                         return _hitList[0] - 10;
                     }
                     //South
 
-                    if (tryVertical.Count > 1 && (gameGridChildSouth.Tag.ToString() == "Water" || shipNames.Contains(gameGridChildSouth.Tag.ToString())))
+                    if (tryVertical.Count > 1 && (gameGridChildSouth == "Water" || shipNames.Contains(gameGridChildSouth)))
                     {
                         return tryVertical[tryVertical.Count - 1] + 10;
                     }
@@ -253,17 +246,13 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
         }
         public int ValidateShot(int coordinate)
         {
-            Grid potentialHitNorth = new Grid();
-            potentialHitNorth.Tag = "";
-            Grid potentialHitEast = new Grid();
-            potentialHitEast.Tag = "";
-            Grid potentialHitSouth = new Grid();
-            potentialHitSouth.Tag = "";
-            Grid potentialHitWest = new Grid();
-            potentialHitWest.Tag = "";
+            string potentialHitNorth = "";
+            string potentialHitEast = "";
+            string potentialHitSouth = "";
+            string potentialHitWest = "";
             try
             {
-                potentialHitNorth = _gameGrid.Children[coordinate - 10] as Grid;
+                potentialHitNorth = _gridDictionary[coordinate - 10];
             }
             catch
             {
@@ -272,7 +261,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             {
                 if ((coordinate + 1) % 10 != 0)
                 {
-                    potentialHitEast = _gameGrid.Children[coordinate + 1] as Grid;
+                    potentialHitEast = _gridDictionary[coordinate + 1];
                 }
             }
             catch
@@ -280,7 +269,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             }
             try
             {
-                potentialHitSouth = _gameGrid.Children[coordinate + 10] as Grid;
+                potentialHitSouth = _gridDictionary[coordinate + 10];
             }
             catch
             {
@@ -289,25 +278,25 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             {
                 if ((coordinate - 1) % 10 != 1)
                 {
-                    potentialHitWest = _gameGrid.Children[coordinate - 1] as Grid;
+                    potentialHitWest = _gridDictionary[coordinate - 1];
                 }
             }
             catch
             {
             }
-            if (potentialHitNorth.Tag.ToString() == "Water" || shipNames.Contains(potentialHitNorth.Tag.ToString()))
+            if (potentialHitNorth == "Water" || shipNames.Contains(potentialHitNorth))
             {
                 return coordinate - 10;
             }
-            if (potentialHitEast.Tag.ToString() == "Water" || shipNames.Contains(potentialHitEast.Tag.ToString()))
+            if (potentialHitEast == "Water" || shipNames.Contains(potentialHitEast))
             {
                 return coordinate + 1;
             }
-            if (potentialHitSouth.Tag.ToString() == "Water" || shipNames.Contains(potentialHitSouth.Tag.ToString()))
+            if (potentialHitSouth == "Water" || shipNames.Contains(potentialHitSouth))
             {
                 return coordinate + 10;
             }
-            if (potentialHitWest.Tag.ToString() == "Water" || shipNames.Contains(potentialHitWest.Tag.ToString()))
+            if (potentialHitWest == "Water" || shipNames.Contains(potentialHitWest))
             {
                 return coordinate - 1;
             }

@@ -16,9 +16,9 @@ namespace BattleshipsSolution3._0.Algorithms
     {
         #region Instance fields
         private int _counter = 0;
-        private Grid _gameGrid;
         private List<int> _hitList = new List<int>();
-        private HuntAlgorithm _hunt;
+        private Dictionary<int, string> _gridDictionary;
+        private HuntAlgorithm _hunt = new HuntAlgorithm();
         private Random _random = new Random();
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
         #endregion
@@ -29,13 +29,31 @@ namespace BattleshipsSolution3._0.Algorithms
         }
         #endregion
         #region Properties
+        public Dictionary<int, string> GridDictionary
+        {
+            get { return _gridDictionary; }
+            set
+            {
+                _gridDictionary = value;
+                OnPropertyChanged();
+            }
+        }
+        public HuntAlgorithm Hunt
+        {
+            get { return _hunt; }
+            set
+            {
+                _hunt = value;
+                OnPropertyChanged();
+            }
+        }
         public int Coordinate
         {
             get
             {
                 if (_hitList.Count != 0)
                 {
-                    _hunt.GameGrid = _gameGrid;
+                    _hunt.GridDictionary = _gridDictionary;
                     _hunt.HitList = _hitList;
                     return _hunt.Coordinate;
                 }
@@ -43,19 +61,18 @@ namespace BattleshipsSolution3._0.Algorithms
                 else if (_counter < 100)
                 {
                     bool viableHit = false;
-                    Grid targetGrid = new Grid();
-                    targetGrid.Tag = "";
+                    string targetGrid = "";
                     while (!viableHit)
                     {
                         _counter += 2;
-                        if (_counter % 20 < 11)
+                        if (_counter % 20 < 11 && _counter % 20 != 0)
                         {
                             try
                             {
-                                targetGrid = _gameGrid.Children[_counter - 1] as Grid;
+                                targetGrid = _gridDictionary[_counter - 1];
                             }
                             catch { }
-                            if ((targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString())) && targetGrid.Tag.ToString() != "Hit")
+                            if ((targetGrid == "Water" || shipNames.Contains(targetGrid)) && targetGrid != "Hit")
                             {
                                 viableHit = true;
                             }
@@ -64,10 +81,10 @@ namespace BattleshipsSolution3._0.Algorithms
                         {
                             try
                             {
-                                targetGrid = _gameGrid.Children[_counter - 2] as Grid;
+                                targetGrid = _gridDictionary[_counter - 2];
                             }
                             catch { }
-                            if ((targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString())) && targetGrid.Tag.ToString() != "Hit")
+                            if ((targetGrid == "Water" || shipNames.Contains(targetGrid)) && targetGrid != "Hit")
                             {
                                 viableHit = true;
                             }
@@ -87,40 +104,25 @@ namespace BattleshipsSolution3._0.Algorithms
                 {
                     bool viableHit = false;
                     int target = -1;
-                    Grid targetGrid = new Grid();
-                    targetGrid.Tag = "";
+                    string targetGrid = "";
                     while (!viableHit)
                     {
-                        target = _random.Next(0, 99);
+                        target = _random.Next(0, 100);
                         try
                         {
-                            targetGrid = _gameGrid.Children[target] as Grid;
+                            targetGrid = _gridDictionary[target];
                         }
                         catch
                         {
 
                         }
-                        if ((targetGrid.Tag.ToString() == "Water" || shipNames.Contains(targetGrid.Tag.ToString())) && targetGrid.Tag.ToString() != "Hit")
+                        if ((targetGrid == "Water" || shipNames.Contains(targetGrid)) && targetGrid != "Hit")
                         {
                             viableHit = true;
                         }
                     }
                     return target;
                 }
-            }
-        }
-
-        public Grid GameGrid
-        {
-            get
-            {
-                return _gameGrid;
-            }
-            set
-            {
-                _gameGrid = value;
-                OnPropertyChanged();
-                _hunt = new HuntAlgorithm(_hitList, value);
             }
         }
         public List<int> HitList

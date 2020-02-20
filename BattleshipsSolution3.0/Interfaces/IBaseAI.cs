@@ -12,6 +12,6 @@ namespace BattleshipsSolution3._0.Interfaces
     {
         int Coordinate { get; }
         List<int> HitList { get; set; }
-        Grid GameGrid { get; set; }
+        Dictionary<int, string> GridDictionary { get; set; }
     }
 }

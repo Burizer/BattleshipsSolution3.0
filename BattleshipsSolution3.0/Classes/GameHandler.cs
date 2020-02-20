@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace BattleshipsSolution3._0.Classes
@@ -23,10 +24,10 @@ namespace BattleshipsSolution3._0.Classes
         private Shiplist _ships;
         private static Random _random = new Random();
         private List<int> _hitList = new List<int>();
+        private Dictionary<int, string> _gridDictionary;
+        private Dictionary<int, string> _hitCoordinateAndType;
         private List<int> _totalShots = new List<int>();
         private List<string> _shipTypeList = new List<string>();
-        private Dictionary<int, string> _hitCoordinateAndType;
-        private static readonly Object lockObj = new Object();
         private string _algorithmName = "";
         private int _shotsAverage = 0;
         private int _shotsMinimum = 0;
@@ -41,17 +42,14 @@ namespace BattleshipsSolution3._0.Classes
         private TextBlock _timeAverageBlock;
         #endregion
         #region Constructor
-        public GameHandler(IBaseAI gameAi, Grid gameAndBoardGrid, int iterations)
+        public GameHandler(IBaseAI gameAi, Grid gameAndBoardGrid)
         {
             _gameAi = gameAi;
             _gameAndBoardGrid = gameAndBoardGrid;
             _gameAi.HitList = _hitList;
             _gameGrid = VisualTreeHelper.GetChild(_gameAndBoardGrid, 0) as Grid;
             _scoreGrid = VisualTreeHelper.GetChild(_gameAndBoardGrid, 1) as Grid;
-            //PopulateGrids();
-            //PlaceShips(new Shiplist());
             SetScoreBoardControls();
-            PlayGame(iterations);
         }
         #endregion
         #region Properties
@@ -156,40 +154,53 @@ namespace BattleshipsSolution3._0.Classes
         }
         #endregion
         #region Methods
+        private Dictionary<int, string> ResetGridDictionary
+        {
+            get
+            {
+                Dictionary<int, string> dict = new Dictionary<int, string>();
+                for (int i = 0; i < 100; i++)
+                {
+                    dict.Add(i, "Water");
+                }
+                return dict;
+            }
+        }
         private void PopulateGrids()
         {
             for (int y = 0; y < 10; y++)
             {
                 for (int x = 0; x < 10; x++)
                 {
-                    Grid newGrid = new Grid();
-                    newGrid.SetValue(Grid.RowProperty, y);
-                    newGrid.SetValue(Grid.ColumnProperty, x);
-                    newGrid.Width = 30;
-                    newGrid.Height = 30;
-                    newGrid.Tag = "Water";
-                    newGrid.Background = new SolidColorBrush(Colors.AliceBlue);
-                    newGrid.MouseDown += GameGrid_MouseDown;
-                    _gameGrid.Children.Add(newGrid);
+                    Rectangle newRect = new Rectangle();
+                    newRect.SetValue(Grid.RowProperty, y);
+                    newRect.SetValue(Grid.ColumnProperty, x);
+                    newRect.Width = 30;
+                    newRect.Height = 30;
+                    newRect.Tag = "Water";
+                    newRect.Fill = new SolidColorBrush(Colors.AliceBlue);
+                    newRect.Stroke = new SolidColorBrush(Colors.Black);
+                    newRect.StrokeThickness = 2;
+                    _gameGrid.Children.Add(newRect);
                 }
             }
         }
         private void SetScoreBoardControls()
         {
-            _algorithmNameBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[1], 0) as TextBlock;
-            _shotsAverageBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[3], 0) as TextBlock;
-            _shotsMinimumBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[5], 0) as TextBlock;
-            _shotsMaximumBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[7], 0) as TextBlock;
-            _timeElapsedBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[9], 0) as TextBlock;
-            _timeAverageBlock = VisualTreeHelper.GetChild(_scoreGrid.Children[11], 0) as TextBlock;
+            _algorithmNameBlock = VisualTreeHelper.GetChild(_scoreGrid, 1) as TextBlock;
+            _shotsAverageBlock = VisualTreeHelper.GetChild(_scoreGrid, 3) as TextBlock;
+            _shotsMinimumBlock = VisualTreeHelper.GetChild(_scoreGrid, 5) as TextBlock;
+            _shotsMaximumBlock = VisualTreeHelper.GetChild(_scoreGrid, 7) as TextBlock;
+            _timeElapsedBlock = VisualTreeHelper.GetChild(_scoreGrid, 9) as TextBlock;
+            _timeAverageBlock = VisualTreeHelper.GetChild(_scoreGrid, 11) as TextBlock;
 
         }
 
-        private void GameGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Grid targetGrid = sender as Grid;
-            CheckHit(-1);
-        }
+        //private void GameGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        //{
+        //    Grid targetGrid = sender as Grid;
+        //    CheckHit(-1);
+        //}
         public void PlayGame(int iterations)
         {
             DateTime gameTimer = new DateTime();
@@ -213,11 +224,12 @@ namespace BattleshipsSolution3._0.Classes
             _ships = new Shiplist();
             _hitCoordinateAndType = new Dictionary<int, string>();
             _gameGrid.Children.Clear();
+            _gridDictionary = ResetGridDictionary;
             PopulateGrids();
             PlaceShips(_ships);
             while (!GameWon)
             {
-                _gameAi.GameGrid = _gameGrid;
+                _gameAi.GridDictionary = _gridDictionary;
                 _gameAi.HitList = _hitList;
                 int checkHitValue = _gameAi.Coordinate;
                 CheckHit(checkHitValue);
@@ -254,19 +266,14 @@ namespace BattleshipsSolution3._0.Classes
             int shipStartIndex = 0;
             while (!placementValid)
             {
-                Grid gridVar = new Grid();
-                gridVar.Tag = "";
+                string gridVar = "";
                 int squaresValidated;
-                shipStartIndex = _random.Next(0, 99);
-                try
-                {
-                    gridVar = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex) as Grid;
-                }
-                catch { }
-                if (gridVar.Tag.ToString() == "Water")
+                shipStartIndex = _random.Next(0, 100);
+                gridVar = _gridDictionary[shipStartIndex];
+                if (gridVar == "Water")
                 {
                     squaresValidated = 0;
-                    int direction = _random.Next(1, 4);
+                    int direction = _random.Next(1, 5);
                     switch (direction)
                     {
                         ///North
@@ -274,24 +281,20 @@ namespace BattleshipsSolution3._0.Classes
                             placeMentIndexer = -10;
                             for (int i = 0; i < ship.Length; i++)
                             {
-                                Grid shipLengthGrid = new Grid();
-                                shipLengthGrid.Tag = "";
-                                if ((shipStartIndex < 100 || shipStartIndex + (placeMentIndexer * i) > -1))
+                                string shipLengthGrid = "";
+                                int shipIndex = shipStartIndex + (placeMentIndexer * i);
+                                if (shipIndex >= 0)
                                 {
-                                    try
-                                    {
-                                        shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Grid;
-                                    }
-                                    catch
+                                    shipLengthGrid = _gridDictionary[shipIndex];
+                                    if (shipLengthGrid != "Water")
                                     {
                                         break;
                                     }
+                                    else
+                                    {
+                                        squaresValidated++;
+                                    }
                                 }
-                                if (shipLengthGrid.Tag.ToString() != "Water")
-                                {
-                                    break;
-                                }
-                                squaresValidated++;
                             }
                             if (squaresValidated == ship.Length)
                             {
@@ -303,24 +306,21 @@ namespace BattleshipsSolution3._0.Classes
                             placeMentIndexer = 1;
                             for (int i = 0; i < ship.Length; i++)
                             {
-                                Grid shipLengthGrid = new Grid();
-                                shipLengthGrid.Tag = "";
-                                if (shipStartIndex + (placeMentIndexer * i) < 100 || shipStartIndex > -1)
+                                string shipLengthGrid = "";
+                                int shipIndex = shipStartIndex + (placeMentIndexer * i);
+                                if (shipIndex <= 99 && shipIndex % 10 != 0)
                                 {
-                                    try
-                                    {
-                                        shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Grid;
-                                    }
-                                    catch
+                                    shipLengthGrid = _gridDictionary[shipIndex];
+                                    if (shipLengthGrid != "Water")
                                     {
                                         break;
                                     }
+                                    else
+                                    {
+                                        squaresValidated++;
+                                    }
                                 }
-                                if (i != 0 && ((shipStartIndex + (placeMentIndexer * i)) % 10 != 0 || shipLengthGrid.Tag.ToString() != "Water"))
-                                {
-                                    break;
-                                }
-                                squaresValidated++;
+
                             }
                             if (squaresValidated == ship.Length)
                             {
@@ -329,27 +329,23 @@ namespace BattleshipsSolution3._0.Classes
                             break;
                         ///South
                         case 3:
-                            placeMentIndexer = -10;
+                            placeMentIndexer = 10;
                             for (int i = 0; i < ship.Length; i++)
                             {
-                                Grid shipLengthGrid = new Grid();
-                                shipLengthGrid.Tag = "";
-                                if ((shipStartIndex < 100 || shipStartIndex + (placeMentIndexer * i) > -1))
+                                string shipLengthGrid = "";
+                                int shipIndex = shipStartIndex + (placeMentIndexer * i);
+                                if (shipIndex <= 99)
                                 {
-                                    try
-                                    {
-                                        shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Grid;
-                                    }
-                                    catch
+                                    shipLengthGrid = _gridDictionary[shipStartIndex + (placeMentIndexer * i)];
+                                    if (shipLengthGrid != "Water")
                                     {
                                         break;
                                     }
+                                    else
+                                    {
+                                        squaresValidated++;
+                                    }
                                 }
-                                if (shipLengthGrid.Tag.ToString() != "Water")
-                                {
-                                    break;
-                                }
-                                squaresValidated++;
                             }
                             if (squaresValidated == ship.Length)
                             {
@@ -361,24 +357,20 @@ namespace BattleshipsSolution3._0.Classes
                             placeMentIndexer = -1;
                             for (int i = 0; i < ship.Length; i++)
                             {
-                                Grid shipLengthGrid = new Grid();
-                                shipLengthGrid.Tag = "";
-                                if (shipStartIndex + (placeMentIndexer * i) < 100 || shipStartIndex > -1)
+                                string shipLengthGrid = "";
+                                int shipIndex = shipStartIndex + (placeMentIndexer * i);
+                                if (shipIndex <= 99 && shipIndex % 10 != 1)
                                 {
-                                    try
-                                    {
-                                        shipLengthGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Grid;
-                                    }
-                                    catch
+                                    shipLengthGrid = _gridDictionary[shipStartIndex + (placeMentIndexer * i)];
+                                    if (shipLengthGrid != "Water")
                                     {
                                         break;
                                     }
+                                    else
+                                    {
+                                        squaresValidated++;
+                                    }
                                 }
-                                if (i != 0 && ((shipStartIndex + (placeMentIndexer * i)) % 10 == 1 || shipLengthGrid.Tag.ToString() != "Water"))
-                                {
-                                    break;
-                                }
-                                squaresValidated++;
                             }
                             if (squaresValidated == ship.Length)
                             {
@@ -390,29 +382,31 @@ namespace BattleshipsSolution3._0.Classes
             }
             for (int i = 0; i < ship.Length; i++)
             {
-                Grid selectedGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Grid;
+                _gridDictionary[shipStartIndex + (placeMentIndexer * i)] = ship.Name;
+                Rectangle selectedGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Rectangle;
                 selectedGrid.Tag = ship.Name;
-                selectedGrid.Background = new SolidColorBrush(Colors.SandyBrown);
+                selectedGrid.Fill = new SolidColorBrush(Colors.SandyBrown);
             }
         }
         public void CheckHit(int coord)
         {
             bool shipIsSunk = false;
-            Grid hitGrid = new Grid();
-            hitGrid.Tag = "";
-            hitGrid = VisualTreeHelper.GetChild(_gameGrid, coord) as Grid;
-            if (hitGrid.Tag.ToString() == "Water")
+            string hitGrid = _gridDictionary[coord];
+            Rectangle targetGrid = _gameGrid.Children[coord] as Rectangle;
+            if (hitGrid == "Water")
             {
-                hitGrid.Tag = "Miss";
-                hitGrid.Background = new SolidColorBrush(Colors.LightSalmon);
+                _gridDictionary[coord] = "Miss";
+
+                targetGrid.Tag = "Miss";
+                targetGrid.Fill = new SolidColorBrush(Colors.LightSalmon);
             }
             else
             {
                 _hitList.Add(coord);
-                _hitCoordinateAndType.Add(coord, hitGrid.Tag.ToString());
+                _hitCoordinateAndType.Add(coord, hitGrid);
                 foreach (Ship item in _ships.Ships)
                 {
-                    if (item.Name == hitGrid.Tag.ToString())
+                    if (item.Name == hitGrid)
                     {
                         item.HitRegistered();
                         if (item.IsSunk)
@@ -427,8 +421,9 @@ namespace BattleshipsSolution3._0.Classes
                     _hitList = _hitCoordinateAndType.Where(x => !sunkenShips.Contains(x.Value)).Select(x => x.Key).ToList();
 
                 }
-                hitGrid.Tag = "Hit";
-                hitGrid.Background = new SolidColorBrush(Colors.LightGreen);
+                _gridDictionary[coord] = "Hit";
+                targetGrid.Tag = "Hit";
+                targetGrid.Fill = new SolidColorBrush(Colors.LightGreen);
             }
         }
         #endregion

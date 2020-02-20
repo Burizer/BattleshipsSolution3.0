@@ -1,0 +1,44 @@
+﻿<Page x:Class="BattleshipsSolution3._0.MVVM_tools.GameStart.View"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BattleshipsSolution3._0.MVVM_tools.GameStart"
+      mc:Ignorable="d"
+      Title="View">
+    <Grid Name="AffixingGrid">
+        <Grid Name="GameAndBoardGrids" Grid.Row="0" Visibility="Hidden" Margin="10,0,0,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        <Grid Name="GameSetupGrids" Grid.Row="0" Visibility="Hidden" Margin="10,0,0,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Name="FinishSetup" Click="FinishSetup_Click" Width="100" Height="30" HorizontalAlignment="Left">Start spil</Button>
+        </Grid>
+        <Grid Name="GameStartGrid" Grid.Row="0" Margin="10,0,0,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Label FontSize="24" HorizontalAlignment="Left">Vælg antal spil</Label>
+            </Grid>
+            <Grid Grid.Row="1" Width="Auto">
+                <ComboBox Name="InitiationDropdown" AllowDrop="True" Height="24" SelectedValuePath="Tag" Margin="0" HorizontalAlignment="Left">
+                    <ComboBoxItem IsSelected="True" Tag="1">1 Spil</ComboBoxItem>
+                    <ComboBoxItem Tag="2">2 Spil</ComboBoxItem>
+                    <ComboBoxItem Tag="3">3 Spil</ComboBoxItem>
+                    <ComboBoxItem Tag="4">4 Spil</ComboBoxItem>
+                </ComboBox>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Button Name="InitiateButton" Click="InitiateButton_Click" Width="100" Height="30" HorizontalAlignment="Left">Gå til setup</Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
