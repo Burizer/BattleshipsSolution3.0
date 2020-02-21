@@ -295,6 +295,10 @@ namespace BattleshipsSolution3._0.Classes
                                         squaresValidated++;
                                     }
                                 }
+                                else
+                                {
+                                    break;
+                                }
                             }
                             if (squaresValidated == ship.Length)
                             {
@@ -323,6 +327,10 @@ namespace BattleshipsSolution3._0.Classes
                                         }
                                     }
                                 }
+                                else
+                                {
+                                    break;
+                                }
 
                             }
                             if (squaresValidated == ship.Length)
@@ -349,6 +357,10 @@ namespace BattleshipsSolution3._0.Classes
                                         squaresValidated++;
                                     }
                                 }
+                                else
+                                {
+                                    break;
+                                }
                             }
                             if (squaresValidated == ship.Length)
                             {
@@ -368,7 +380,7 @@ namespace BattleshipsSolution3._0.Classes
                                     {
                                         shipLengthGrid = _gridDictionary[shipIndex];
                                         if (shipLengthGrid != "Water")
-                                        {   
+                                        {
                                             break;
                                         }
                                         else
