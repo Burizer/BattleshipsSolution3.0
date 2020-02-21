@@ -100,7 +100,15 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     }
                     if (potentialHits.Count != 0)
                     {
-                        int direction = potentialHits[_random.Next(potentialHits.Count)];
+                        int direction;
+                        if (potentialHits.Count == 1)
+                        {
+                            direction = potentialHits[0];
+                        }
+                        else
+                        {
+                            direction = potentialHits[_random.Next(potentialHits.Count)];
+                        }
                         switch (direction)
                         {
                             case 1:
@@ -159,14 +167,6 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                 string gameGridChildWest = "";
                 string gameGridChildNorth = "";
                 string gameGridChildSouth = "";
-                //Grid gameGridChildEast = new Grid();
-                //gameGridChildEast.Tag = "";
-                //Grid gameGridChildWest = new Grid();
-                //gameGridChildWest.Tag = "";
-                //Grid gameGridChildNorth = new Grid();
-                //gameGridChildNorth.Tag = "";
-                //Grid gameGridChildSouth = new Grid();
-                //gameGridChildSouth.Tag = "";
                 try
                 {
                     if ((tryHorizontal[tryHorizontal.Count - 1] + 1) % 10 != 0)
@@ -227,20 +227,16 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                         return tryVertical[tryVertical.Count - 1] + 10;
                     }
                 }
-                else
+                foreach (int item in _hitList)
                 {
-                    foreach (int item in _hitList)
+                    int shot = -1;
+                    shot = ValidateShot(item);
+                    if (shot != -1)
                     {
-                        int shot = -1;
-                        shot = ValidateShot(item);
-                        if (shot != -1)
-                        {
-                            return shot;
-                        }
+                        return shot;
                     }
-                    #endregion
-                    return -1;
                 }
+                #endregion
                 return -1;
             }
         }

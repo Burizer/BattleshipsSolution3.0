@@ -267,7 +267,7 @@ namespace BattleshipsSolution3._0.Classes
             while (!placementValid)
             {
                 string gridVar = "";
-                int squaresValidated;
+                int squaresValidated = 0;
                 shipStartIndex = _random.Next(0, 100);
                 gridVar = _gridDictionary[shipStartIndex];
                 if (gridVar == "Water")
@@ -308,16 +308,19 @@ namespace BattleshipsSolution3._0.Classes
                             {
                                 string shipLengthGrid = "";
                                 int shipIndex = shipStartIndex + (placeMentIndexer * i);
-                                if (shipIndex <= 99 && shipIndex % 10 != 0)
+                                if (shipIndex <= 99)
                                 {
-                                    shipLengthGrid = _gridDictionary[shipIndex];
-                                    if (shipLengthGrid != "Water")
+                                    if (shipIndex % 10 != 0 || i == 0)
                                     {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        squaresValidated++;
+                                        shipLengthGrid = _gridDictionary[shipIndex];
+                                        if (shipLengthGrid != "Water")
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            squaresValidated++;
+                                        }
                                     }
                                 }
 
@@ -359,16 +362,23 @@ namespace BattleshipsSolution3._0.Classes
                             {
                                 string shipLengthGrid = "";
                                 int shipIndex = shipStartIndex + (placeMentIndexer * i);
-                                if (shipIndex <= 99 && shipIndex % 10 != 1)
+                                if (shipIndex >= 0)
                                 {
-                                    shipLengthGrid = _gridDictionary[shipStartIndex + (placeMentIndexer * i)];
-                                    if (shipLengthGrid != "Water")
+                                    if (i == 0 || shipIndex % 10 != 1)
                                     {
-                                        break;
+                                        shipLengthGrid = _gridDictionary[shipIndex];
+                                        if (shipLengthGrid != "Water")
+                                        {   
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            squaresValidated++;
+                                        }
                                     }
                                     else
                                     {
-                                        squaresValidated++;
+                                        break;
                                     }
                                 }
                             }

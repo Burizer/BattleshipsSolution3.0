@@ -120,7 +120,10 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 _setupGrid.RowDefinitions.Add(new RowDefinition());
                 Grid setupGrid = new Grid();
                 Thickness setupGridThickness = setupGrid.Margin;
+                if (i == 0)
+                { 
                 setupGridThickness.Top = 10;
+                }
                 setupGridThickness.Left = 10;
                 setupGrid.Margin = setupGridThickness;
                 setupGrid.SetValue(Grid.RowProperty, i);
@@ -164,6 +167,9 @@ namespace BattleshipsSolution3._0.MVVM_tools
             finishSetup.MouseDown += FinishSetup_Click;
             finishSetup.HorizontalAlignment = HorizontalAlignment.Left;
             finishSetup.VerticalAlignment = VerticalAlignment.Center;
+            Thickness finishSetupMargin = finishSetup.Margin;
+            finishSetupMargin.Left = 10;
+            finishSetup.Margin = finishSetupMargin;
             _setupGrid.Children.Add(finishSetup);
             _initializationGrid.Visibility = Visibility.Hidden;
             _setupGrid.Visibility = Visibility.Visible;
