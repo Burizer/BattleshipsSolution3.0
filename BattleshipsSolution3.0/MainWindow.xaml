@@ -10,9 +10,6 @@
         <Grid x:Name="MainGrid">
             <Grid Name="GameAndScoreBoardGrids" Visibility="Hidden"></Grid>
             <Grid Name="GameSetupGrids" Visibility="Hidden">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
             </Grid>
             <Grid Name="GameInitiationGrid"></Grid>
         </Grid>

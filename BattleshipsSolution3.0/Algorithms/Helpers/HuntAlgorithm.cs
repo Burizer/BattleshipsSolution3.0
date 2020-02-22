@@ -54,7 +54,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             {
                 _hitList.Sort();
                 #region Single count
-                if (_hitList.Count == 1 || (_hitList[0] % 10 != _hitList[1] % 10 && (_hitList[0] % 10 != (_hitList[1] % 10) + 1) && _hitList[0] + 10 != _hitList[1] + 1))
+                if (_hitList.Count == 1)
                 {
                     int currentGrid = _hitList[0];
                     List<int> potentialHits = new List<int>();
@@ -86,7 +86,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     {
                         potentialHits.Add(1);
                     }
-                    if ((targetGridEast == "Water" || shipNames.Contains(targetGridEast)) && currentGrid + 1 % 10 != 0)
+                    if (targetGridEast == "Water" || shipNames.Contains(targetGridEast))
                     {
                         potentialHits.Add(2);
                     }
@@ -94,7 +94,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     {
                         potentialHits.Add(3);
                     }
-                    if ((targetGridWest == "Water" || shipNames.Contains(targetGridWest)) && currentGrid - 1 % 10 != 1)
+                    if (targetGridWest == "Water" || shipNames.Contains(targetGridWest))
                     {
                         potentialHits.Add(4);
                     }
@@ -124,177 +124,193 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                 }
                 #endregion
                 #region Multiple count
-                List<int> tryVertical = new List<int>();
-                List<int> tryHorizontal = new List<int>();
-                foreach (int val in _hitList)
+                if (_hitList.Count >= 2)
                 {
-                    if (val % 10 == _hitList[0] % 10)
-                    {
-                        tryVertical.Add(val);
-                    }
-                }
-                if (tryVertical.Count <= 1)
-                {
+                    List<int> tryVertical = new List<int>();
+                    List<int> tryHorizontal = new List<int>();
                     foreach (int val in _hitList)
                     {
-                        if (val % 10 == _hitList[_hitList.Count - 1])
+                        if (val % 10 == _hitList[0] % 10)
                         {
                             tryVertical.Add(val);
                         }
                     }
-                }
-                int tryIndexDef = -2;
-                for (int i = 0; i < _hitList.Count - 1; i++)
-                {
-                    if (i == 0)
+                    if (tryVertical.Count == 1)
                     {
-                        tryHorizontal.Add(_hitList[i]);
+                        tryVertical.Clear();
+                        foreach (int val in _hitList)
+                        {
+                            if (val % 10 == _hitList[_hitList.Count - 1])
+                            {
+                                tryVertical.Add(val);
+                            }
+                        }
                     }
-                    else
+                    for (int i = 0; i < _hitList.Count; i++)
                     {
-                        tryIndexDef = _hitList[i - 1] + 1;
+                        if (i == 0)
+                        {
+                            tryHorizontal.Add(_hitList[i]);
+                        }
+                        else
+                        {
+                            if (_hitList[i] == _hitList[i - 1] + 1)
+                            {
+                                tryHorizontal.Add(_hitList[i]);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
                     }
-                    if (_hitList[i] == tryIndexDef)
+                    string gameGridChildEast = "";
+                    string gameGridChildWest = "";
+                    string gameGridChildNorth = "";
+                    string gameGridChildSouth = "";
+                    try
                     {
-                        tryHorizontal.Add(_hitList[i]);
+                        if ((tryHorizontal[tryHorizontal.Count - 1] + 1) % 10 != 0)
+                        {
+                            gameGridChildEast = _gridDictionary[tryHorizontal[tryHorizontal.Count - 1] + 1];
+                        }
                     }
-                    else
+                    catch
                     {
-                        break;
                     }
-                }
-                string gameGridChildEast = "";
-                string gameGridChildWest = "";
-                string gameGridChildNorth = "";
-                string gameGridChildSouth = "";
-                try
-                {
-                    if ((tryHorizontal[tryHorizontal.Count - 1] + 1) % 10 != 0)
+                    try
                     {
-                        gameGridChildEast = _gridDictionary[tryHorizontal[tryHorizontal.Count - 1] + 1];
+                        if ((tryHorizontal[0] - 1) % 10 != 9)
+                        {
+                            gameGridChildWest = _gridDictionary[tryHorizontal[0] - 1];
+                        }
                     }
-                }
-                catch
-                {
-                }
-                try
-                {
-                    if ((tryHorizontal[0] - 1) % 10 != 1)
+                    catch
                     {
-                        gameGridChildWest = _gridDictionary[tryHorizontal[0] - 1];
                     }
-                }
-                catch
-                {
-                }
-                try
-                {
-                    gameGridChildNorth = _gridDictionary[tryVertical[0] - 10];
-                }
-                catch
-                {
-                }
-                try
-                {
-                    gameGridChildSouth = _gridDictionary[tryVertical[tryVertical.Count - 1] + 10];
-                }
-                catch
-                {
-                }
-                if ((gameGridChildNorth == "Water" || shipNames.Contains(gameGridChildNorth.ToString())) || (gameGridChildEast == "Water" || shipNames.Contains(gameGridChildEast.ToString())) || (gameGridChildSouth == "Water" || shipNames.Contains(gameGridChildSouth)) || (gameGridChildWest == "Water" || shipNames.Contains(gameGridChildWest)))
-                {
-                    //East
+                    try
+                    {
+                        gameGridChildNorth = _gridDictionary[tryVertical[0] - 10];
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        gameGridChildSouth = _gridDictionary[tryVertical[tryVertical.Count - 1] + 10];
+                    }
+                    catch
+                    {
+                    }
+                    if (tryHorizontal.Count >= 2)
+                    {
+                        if ((gameGridChildEast == "Water" || shipNames.Contains(gameGridChildEast)) || (gameGridChildWest == "Water" || shipNames.Contains(gameGridChildWest)))
+                        {
+                            //East
 
-                    if (tryHorizontal.Count > 1 && (gameGridChildEast == "Water" || shipNames.Contains(gameGridChildEast)) && ((_hitList[_hitList.Count] - 1) + 1) % 10 != 0)
-                    {
-                        return tryHorizontal[tryHorizontal.Count - 1] + 1;
-                    }
-                    //West
+                            if ((gameGridChildEast == "Water" || shipNames.Contains(gameGridChildEast)) && ((_hitList[_hitList.Count - 1]) + 1) % 10 != 0)
+                            {
+                                return tryHorizontal[tryHorizontal.Count - 1] + 1;
+                            }
+                            //West
 
-                    if (tryHorizontal.Count > 1 && (gameGridChildWest == "Water" || shipNames.Contains(gameGridChildWest)) && (_hitList[0] - 1) % 10 != 1)
-                    {
-                        return tryHorizontal[0] - 1;
+                            if ((gameGridChildWest == "Water" || shipNames.Contains(gameGridChildWest)) && (_hitList[0] - 1) % 10 != 9)
+                            {
+                                return tryHorizontal[0] - 1;
+                            }
+                        }
                     }
-                    //North
-                    if (tryVertical.Count > 1 && (gameGridChildNorth == "Water" || shipNames.Contains(gameGridChildNorth)))
+                    if (tryVertical.Count >= 2)
                     {
-                        return _hitList[0] - 10;
-                    }
-                    //South
+                        if ((gameGridChildNorth == "Water" || shipNames.Contains(gameGridChildNorth)) || (gameGridChildSouth == "Water" || shipNames.Contains(gameGridChildSouth)))
+                        {
+                            //North
+                            if (gameGridChildNorth == "Water" || shipNames.Contains(gameGridChildNorth))
+                            {
+                                return _hitList[0] - 10;
+                            }
+                            //South
 
-                    if (tryVertical.Count > 1 && (gameGridChildSouth == "Water" || shipNames.Contains(gameGridChildSouth)))
-                    {
-                        return tryVertical[tryVertical.Count - 1] + 10;
+                            if (gameGridChildSouth == "Water" || shipNames.Contains(gameGridChildSouth))
+                            {
+                                return tryVertical[tryVertical.Count - 1] + 10;
+                            }
+                        }
                     }
                 }
                 foreach (int item in _hitList)
                 {
-                    int shot = -1;
-                    shot = ValidateShot(item);
-                    if (shot != -1)
-                    {
-                        return shot;
-                    }
+                    return ValidateShot(item);
                 }
                 #endregion
                 return -1;
             }
+
         }
         public int ValidateShot(int coordinate)
         {
-            string potentialHitNorth = "";
-            string potentialHitEast = "";
-            string potentialHitSouth = "";
-            string potentialHitWest = "";
-            try
+            int returnVal = -1;
+            foreach (var item in _hitList)
             {
-                potentialHitNorth = _gridDictionary[coordinate - 10];
-            }
-            catch
-            {
-            }
-            try
-            {
-                if ((coordinate + 1) % 10 != 0)
+                string potentialHitNorth = "";
+                try
                 {
-                    potentialHitEast = _gridDictionary[coordinate + 1];
+                    potentialHitNorth = _gridDictionary[coordinate - 10];
                 }
-            }
-            catch
-            {
-            }
-            try
-            {
-                potentialHitSouth = _gridDictionary[coordinate + 10];
-            }
-            catch
-            {
-            }
-            try
-            {
-                if ((coordinate - 1) % 10 != 1)
+                catch
                 {
-                    potentialHitWest = _gridDictionary[coordinate - 1];
                 }
-            }
-            catch
-            {
-            }
-            if (potentialHitNorth == "Water" || shipNames.Contains(potentialHitNorth))
-            {
-                return coordinate - 10;
-            }
-            if (potentialHitEast == "Water" || shipNames.Contains(potentialHitEast))
-            {
-                return coordinate + 1;
-            }
-            if (potentialHitSouth == "Water" || shipNames.Contains(potentialHitSouth))
-            {
-                return coordinate + 10;
-            }
-            if (potentialHitWest == "Water" || shipNames.Contains(potentialHitWest))
-            {
-                return coordinate - 1;
+                if (potentialHitNorth == "Water" || shipNames.Contains(potentialHitNorth))
+                {
+                    returnVal = coordinate - 10;
+                }
+                string potentialHitEast = "";
+                try
+                {
+                    if ((coordinate + 1) % 10 != 0)
+                    {
+                        potentialHitEast = _gridDictionary[coordinate + 1];
+                    }
+                }
+                catch
+                {
+                }
+                if (potentialHitEast == "Water" || shipNames.Contains(potentialHitEast))
+                {
+                    returnVal = coordinate + 1;
+                }
+                string potentialHitSouth = "";
+
+                try
+                {
+                    potentialHitSouth = _gridDictionary[coordinate + 10];
+                }
+                catch
+                {
+                }
+                if (potentialHitSouth == "Water" || shipNames.Contains(potentialHitSouth))
+                {
+                    returnVal = coordinate + 10;
+                }
+                string potentialHitWest = "";
+                try
+                {
+                    if ((coordinate - 1) % 10 != 9)
+                    {
+                        potentialHitWest = _gridDictionary[coordinate - 1];
+                    }
+                }
+                catch
+                {
+                }   
+                if (potentialHitWest == "Water" || shipNames.Contains(potentialHitWest))
+                {
+                    returnVal = coordinate - 1;
+                }
+                if (returnVal != -1)
+                {
+                    return returnVal;
+                }
             }
             return -1;
         }

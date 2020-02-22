@@ -58,53 +58,32 @@ namespace BattleshipsSolution3._0.Algorithms
                     return _hunt.Coordinate;
                 }
 
-                else if (_counter < 100)
+                else
                 {
-                    bool viableHit = false;
                     string targetGrid = "";
-                    while (!viableHit)
+                    while (_counter <= 100)
                     {
                         _counter += 2;
                         if (_counter % 20 < 11 && _counter % 20 != 0)
                         {
-                            try
+                            targetGrid = _gridDictionary[_counter - 1];
+                            if (targetGrid == "Water" || shipNames.Contains(targetGrid))
                             {
-                                targetGrid = _gridDictionary[_counter - 1];
-                            }
-                            catch { }
-                            if ((targetGrid == "Water" || shipNames.Contains(targetGrid)) && targetGrid != "Hit")
-                            {
-                                viableHit = true;
+                                return _counter - 1;
                             }
                         }
                         else
                         {
-                            try
+                            targetGrid = _gridDictionary[_counter - 2];
+                            if (targetGrid == "Water" || shipNames.Contains(targetGrid))
                             {
-                                targetGrid = _gridDictionary[_counter - 2];
-                            }
-                            catch { }
-                            if ((targetGrid == "Water" || shipNames.Contains(targetGrid)) && targetGrid != "Hit")
-                            {
-                                viableHit = true;
+                                return _counter - 2;
                             }
                         }
                     }
-
-                    if (_counter % 20 < 11)
-                    {
-                        return _counter - 1;
-                    }
-                    else
-                    {
-                        return _counter - 2;
-                    }
-                }
-                else
-                {
                     bool viableHit = false;
                     int target = -1;
-                    string targetGrid = "";
+                    targetGrid = "";
                     while (!viableHit)
                     {
                         target = _random.Next(0, 100);

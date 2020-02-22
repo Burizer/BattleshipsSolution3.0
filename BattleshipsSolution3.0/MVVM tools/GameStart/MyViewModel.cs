@@ -161,6 +161,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 setupGrid.Children.Add(IterationTextBox);
                 _setupGrid.Children.Add(setupGrid);
             }
+            _setupGrid.RowDefinitions.Add(new RowDefinition());
             Button finishSetup = new Button();
             finishSetup.Content = "Start alle spil!";
             finishSetup.SetValue(Grid.RowProperty, _setupGrid.RowDefinitions.Count - 1);
@@ -180,14 +181,16 @@ namespace BattleshipsSolution3._0.MVVM_tools
             List<int> iterationList = new List<int>();
             for (int i = 0; i < NumberOfGrids; i++)
             {
-                Grid gameAndBoardGrid = new Grid();
-                int GameGridSize = 300;
                 _gameAndScoreboardGrid.RowDefinitions.Add(new RowDefinition());
+                Grid gameAndBoardGrid = new Grid();
+                gameAndBoardGrid.RowDefinitions.Add(new RowDefinition());
+                gameAndBoardGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                gameAndBoardGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 Grid GameGrid = new Grid();
                 GameGrid.SetValue(Grid.RowProperty, i);
                 GameGrid.SetValue(Grid.ColumnProperty, 0);
-                GameGrid.Width = GameGridSize;
-                GameGrid.Height = GameGridSize;
+                GameGrid.Width = 300;
+                GameGrid.Height = 300;
                 Thickness gameGridMargin = GameGrid.Margin;
                 gameGridMargin.Top = 10;
                 gameGridMargin.Left = 10;
@@ -203,8 +206,11 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 ScoreBoard.SetValue(Grid.RowProperty, i);
                 ScoreBoard.SetValue(Grid.ColumnProperty, 1);
                 ScoreBoard.Width = 300;
-                ScoreBoard.Height = GameGridSize;
-                ScoreBoard.Margin = gameGridMargin;
+                ScoreBoard.Height = 300;
+                Thickness scoreBoardMargin = ScoreBoard.Margin;
+                scoreBoardMargin.Left = 10;
+                scoreBoardMargin.Top = 10;
+                ScoreBoard.Margin = scoreBoardMargin;
                 ColumnDefinition leftColumn = new ColumnDefinition();
                 leftColumn.Width = new GridLength(100);
                 ColumnDefinition rightColumn = new ColumnDefinition();

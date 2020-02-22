@@ -207,7 +207,14 @@ namespace BattleshipsSolution3._0.Classes
             gameTimer = DateTime.Now;
             for (int i = 0; i < iterations; i++)
             {
-                Turn(i);
+                if (i != iterations - 1)
+                {
+                    Turn(i, false);
+                }
+                else
+                {
+                    Turn(i, true);
+                }
             }
             TimeSpan gameEndTimer = new TimeSpan();
             gameEndTimer = DateTime.Now - gameTimer;
@@ -218,21 +225,29 @@ namespace BattleshipsSolution3._0.Classes
             _timeAverage = averageSpan.ToString();
             _timeAverageBlock.Text = _timeAverage;
         }
-        private void Turn(int loopVar)
+        private void Turn(int loopVar, bool lastIteration)
         {
             int shotsFired = 0;
             _ships = new Shiplist();
             _hitCoordinateAndType = new Dictionary<int, string>();
-            _gameGrid.Children.Clear();
             _gridDictionary = ResetGridDictionary;
-            PopulateGrids();
-            PlaceShips(_ships);
+            if (lastIteration == true)
+            {
+                _gameGrid.Children.Clear();
+                PopulateGrids();
+                PlaceShips(_ships, true);
+            }
+            else
+            {
+                PlaceShips(_ships, false);
+            }
+
             while (!GameWon)
             {
                 _gameAi.GridDictionary = _gridDictionary;
                 _gameAi.HitList = _hitList;
                 int checkHitValue = _gameAi.Coordinate;
-                CheckHit(checkHitValue);
+                CheckHit(checkHitValue, lastIteration);
                 shotsFired++;
             }
             _totalShots.Add(shotsFired);
@@ -252,175 +267,115 @@ namespace BattleshipsSolution3._0.Classes
             _shotsMinimumBlock.Text = _shotsMinimum.ToString();
             _shotsMaximumBlock.Text = _shotsMaximum.ToString();
         }
-        public void PlaceShips(Shiplist shipList)
+        public void PlaceShips(Shiplist shipList, bool lastIteration)
         {
             foreach (Ship item in shipList.Ships)
             {
-                ValidateShipPlacement(item);
+                ValidateShipPlacement(item, lastIteration);
             }
         }
-        private void ValidateShipPlacement(Ship ship)
+        private void ValidateShipPlacement(Ship ship, bool lastIteration)
         {
             bool placementValid = false;
             int placeMentIndexer = 0;
             int shipStartIndex = 0;
             while (!placementValid)
             {
-                string gridVar = "";
                 int squaresValidated = 0;
-                shipStartIndex = _random.Next(0, 100);
-                gridVar = _gridDictionary[shipStartIndex];
-                if (gridVar == "Water")
+                int direction = _random.Next(1, 3);
+                switch (direction)
                 {
-                    squaresValidated = 0;
-                    int direction = _random.Next(1, 5);
-                    switch (direction)
-                    {
-                        ///North
-                        case 1:
-                            placeMentIndexer = -10;
-                            for (int i = 0; i < ship.Length; i++)
+                    ///East
+                    case 1:
+                        placeMentIndexer = 1;
+                        shipStartIndex = (_random.Next(10) * 10) + _random.Next(10 - (ship.Length - 1));
+                        for (int i = 0; i < ship.Length; i++)
+                        {
+                            string shipLengthGrid = "";
+                            int shipIndex = shipStartIndex + (placeMentIndexer * i);
+                            if (shipIndex <= 99)
                             {
-                                string shipLengthGrid = "";
-                                int shipIndex = shipStartIndex + (placeMentIndexer * i);
-                                if (shipIndex >= 0)
-                                {
-                                    shipLengthGrid = _gridDictionary[shipIndex];
-                                    if (shipLengthGrid != "Water")
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        squaresValidated++;
-                                    }
-                                }
-                                else
+                                shipLengthGrid = _gridDictionary[shipIndex];
+                                if (shipLengthGrid != "Water")
                                 {
                                     break;
                                 }
-                            }
-                            if (squaresValidated == ship.Length)
-                            {
-                                placementValid = true;
-                            }
-                            break;
-                        ///East
-                        case 2:
-                            placeMentIndexer = 1;
-                            for (int i = 0; i < ship.Length; i++)
-                            {
-                                string shipLengthGrid = "";
-                                int shipIndex = shipStartIndex + (placeMentIndexer * i);
-                                if (shipIndex <= 99)
-                                {
-                                    if (shipIndex % 10 != 0 || i == 0)
-                                    {
-                                        shipLengthGrid = _gridDictionary[shipIndex];
-                                        if (shipLengthGrid != "Water")
-                                        {
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            squaresValidated++;
-                                        }
-                                    }
-                                }
                                 else
                                 {
-                                    break;
+                                    squaresValidated++;
                                 }
+                            }
+                            else
+                            {
+                                break;
+                            }
 
-                            }
-                            if (squaresValidated == ship.Length)
+                        }
+                        if (squaresValidated == ship.Length)
+                        {
+                            placementValid = true;
+                        }
+                        break;
+                    ///South
+                    case 2:
+                        placeMentIndexer = 10;
+                        shipStartIndex = (_random.Next(10 - (ship.Length - 1)) * 10) + _random.Next(10);
+                        for (int i = 0; i < ship.Length; i++)
+                        {
+                            string shipLengthGrid = "";
+                            int shipIndex = shipStartIndex + (placeMentIndexer * i);
+                            if (shipIndex <= 99)
                             {
-                                placementValid = true;
-                            }
-                            break;
-                        ///South
-                        case 3:
-                            placeMentIndexer = 10;
-                            for (int i = 0; i < ship.Length; i++)
-                            {
-                                string shipLengthGrid = "";
-                                int shipIndex = shipStartIndex + (placeMentIndexer * i);
-                                if (shipIndex <= 99)
-                                {
-                                    shipLengthGrid = _gridDictionary[shipStartIndex + (placeMentIndexer * i)];
-                                    if (shipLengthGrid != "Water")
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        squaresValidated++;
-                                    }
-                                }
-                                else
+                                shipLengthGrid = _gridDictionary[shipStartIndex + (placeMentIndexer * i)];
+                                if (shipLengthGrid != "Water")
                                 {
                                     break;
                                 }
-                            }
-                            if (squaresValidated == ship.Length)
-                            {
-                                placementValid = true;
-                            }
-                            break;
-                        ///West
-                        case 4:
-                            placeMentIndexer = -1;
-                            for (int i = 0; i < ship.Length; i++)
-                            {
-                                string shipLengthGrid = "";
-                                int shipIndex = shipStartIndex + (placeMentIndexer * i);
-                                if (shipIndex >= 0)
+                                else
                                 {
-                                    if (i == 0 || shipIndex % 10 != 1)
-                                    {
-                                        shipLengthGrid = _gridDictionary[shipIndex];
-                                        if (shipLengthGrid != "Water")
-                                        {
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            squaresValidated++;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
+                                    squaresValidated++;
                                 }
                             }
-                            if (squaresValidated == ship.Length)
+                            else
                             {
-                                placementValid = true;
+                                break;
                             }
-                            break;
-                    }
+                        }
+                        if (squaresValidated == ship.Length)
+                        {
+                            placementValid = true;
+                        }
+                        break;
                 }
             }
             for (int i = 0; i < ship.Length; i++)
             {
                 _gridDictionary[shipStartIndex + (placeMentIndexer * i)] = ship.Name;
-                Rectangle selectedGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Rectangle;
-                selectedGrid.Tag = ship.Name;
-                selectedGrid.Fill = new SolidColorBrush(Colors.SandyBrown);
+                if (lastIteration)
+                {
+                    Rectangle selectedGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Rectangle;
+                    selectedGrid.Tag = ship.Name;
+                    selectedGrid.Fill = new SolidColorBrush(Colors.SandyBrown);
+                }
             }
         }
-        public void CheckHit(int coord)
+        public void CheckHit(int coord, bool lastIteration)
         {
             bool shipIsSunk = false;
             string hitGrid = _gridDictionary[coord];
-            Rectangle targetGrid = _gameGrid.Children[coord] as Rectangle;
+            var targetGrid = new Rectangle();
+            if (lastIteration)
+            {
+                targetGrid = _gameGrid.Children[coord] as Rectangle;
+            }
             if (hitGrid == "Water")
             {
                 _gridDictionary[coord] = "Miss";
-
-                targetGrid.Tag = "Miss";
-                targetGrid.Fill = new SolidColorBrush(Colors.LightSalmon);
+                if (lastIteration)
+                {
+                    targetGrid.Tag = "Miss";
+                    targetGrid.Fill = new SolidColorBrush(Colors.LightSalmon);
+                }
             }
             else
             {
@@ -444,8 +399,11 @@ namespace BattleshipsSolution3._0.Classes
 
                 }
                 _gridDictionary[coord] = "Hit";
-                targetGrid.Tag = "Hit";
-                targetGrid.Fill = new SolidColorBrush(Colors.LightGreen);
+                if (lastIteration)
+                {
+                    targetGrid.Tag = "Hit";
+                    targetGrid.Fill = new SolidColorBrush(Colors.LightGreen);
+                }
             }
         }
         #endregion

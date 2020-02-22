@@ -62,7 +62,7 @@ namespace BattleshipsSolution3._0.Algorithms
                 int randomHit = -1;
                 while (!viableHit)
                 {
-                    randomHit = _random.Next(0, 99);
+                    randomHit = _random.Next(0, 100);
                     if (_gridDictionary[randomHit] == "Water" || shipNames.Contains(_gridDictionary[randomHit]))
                     {
                         viableHit = true;
