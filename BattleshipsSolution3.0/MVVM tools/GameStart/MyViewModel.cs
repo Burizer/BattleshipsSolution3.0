@@ -260,15 +260,12 @@ namespace BattleshipsSolution3._0.MVVM_tools
             }
             _setupGrid.Visibility = Visibility.Hidden;
             _gameAndScoreboardGrid.Visibility = Visibility.Visible;
-            Dispatcher.CurrentDispatcher.Invoke(() =>
+            Parallel.ForEach(baseAIs, (game) =>
             {
-                foreach (GameHandler item in baseAIs)
-                {
-                    var newThread = new Thread(() => item.PlayGame());
-                    newThread.SetApartmentState(ApartmentState.STA);
-                    newThread.Start();
-                }
-            }, DispatcherPriority.ContextIdle);
+                var newThread = new Thread(() => game.PlayGame());
+                newThread.SetApartmentState(ApartmentState.STA);
+                newThread.Start();
+            });
         }
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
