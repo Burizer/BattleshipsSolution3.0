@@ -208,6 +208,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 Grid ScoreBoard = new Grid();
                 ScoreBoard.SetValue(Grid.RowProperty, i);
                 ScoreBoard.SetValue(Grid.ColumnProperty, 1);
+                ScoreBoard.HorizontalAlignment = HorizontalAlignment.Left;
                 ScoreBoard.Width = 300;
                 ScoreBoard.Height = 300;
                 Thickness scoreBoardMargin = ScoreBoard.Margin;
@@ -215,9 +216,9 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 scoreBoardMargin.Top = 10;
                 ScoreBoard.Margin = scoreBoardMargin;
                 ColumnDefinition leftColumn = new ColumnDefinition();
-                leftColumn.Width = new GridLength(100);
+                leftColumn.Width = new GridLength(140);
                 ColumnDefinition rightColumn = new ColumnDefinition();
-                rightColumn.Width = new GridLength(190);
+                rightColumn.Width = new GridLength(160);
                 ScoreBoard.ColumnDefinitions.Add(leftColumn);
                 ScoreBoard.ColumnDefinitions.Add(rightColumn);
                 for (int k = 0; k < 6; k++)
@@ -289,26 +290,23 @@ namespace BattleshipsSolution3._0.MVVM_tools
             _setupGrid.Visibility = Visibility.Hidden;
             _gameAndScoreboardGrid.Visibility = Visibility.Visible;
             var gameGrids = new List<Dictionary<int, string>>();
-            Task[] tasks = new Task[baseAIs.Count];
-            var taskCount = 0;
+            var tasks = new List<Task>();
             foreach (GameHandler game in baseAIs)
             {
                 var myTask = Task.Run(() => gameGrids.Add(game.PlayGame));
-                tasks[taskCount] = myTask;
-                taskCount++;
+                tasks.Add(myTask);
             }
-            Task.WaitAll(tasks);
+            Task.WaitAll(tasks.ToArray());
             for (int i = 0; i < gameGrids.Count; i++)
             {
-                var topGrid = _affixGrid.Children[i] as Grid;
-                var gameGrid = topGrid.Children[0] as Grid;
-                gameGrid = buildGrid(gameGrids[i]);
+                var topGrid = _affixGrid.Children[0] as Grid;
+                var gameAndBoardGrid = topGrid.Children[i] as Grid;
+                var gameGrid = gameAndBoardGrid.Children[0] as Grid;
+                buildGrid(gameGrid, gameGrids[i]);
             }
         }
-        private Grid buildGrid(Dictionary<int, string> dictionary)
+        private void buildGrid(Grid gameGrid, Dictionary<int, string> dictionary)
         {
-            var gameGrid = new Grid();
-            gameGrid.SetValue(Grid.ColumnProperty, 0);
             for (int y = 0; y < 10; y++)
             {
                 for (int x = 0; x < 10; x++)
@@ -337,7 +335,6 @@ namespace BattleshipsSolution3._0.MVVM_tools
                     gameGrid.Children.Add(newRect);
                 }
             }
-            return gameGrid;
         }
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
