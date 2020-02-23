@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +18,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace BattleshipsSolution3._0.MVVM_tools
 {
@@ -121,8 +123,8 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 Grid setupGrid = new Grid();
                 Thickness setupGridThickness = setupGrid.Margin;
                 if (i == 0)
-                { 
-                setupGridThickness.Top = 10;
+                {
+                    setupGridThickness.Top = 10;
                 }
                 setupGridThickness.Left = 10;
                 setupGrid.Margin = setupGridThickness;
@@ -186,8 +188,8 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 gameAndBoardGrid.RowDefinitions.Add(new RowDefinition());
                 gameAndBoardGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 gameAndBoardGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                gameAndBoardGrid.SetValue(Grid.RowProperty, i);
                 Grid GameGrid = new Grid();
-                GameGrid.SetValue(Grid.RowProperty, i);
                 GameGrid.SetValue(Grid.ColumnProperty, 0);
                 GameGrid.Width = 300;
                 GameGrid.Height = 300;
@@ -251,18 +253,22 @@ namespace BattleshipsSolution3._0.MVVM_tools
                     _gameAndScoreboardGrid.Children.Clear();
                     return;
                 }
-                iterationList.Add(iterations);
                 gameAndBoardGrid.Children.Add(GameGrid);
                 gameAndBoardGrid.Children.Add(ScoreBoard);
                 _gameAndScoreboardGrid.Children.Add(gameAndBoardGrid);
-                baseAIs.Add(new GameHandler(gameAI, gameAndBoardGrid));
+                baseAIs.Add(new GameHandler(gameAI, gameAndBoardGrid, iterations));
             }
             _setupGrid.Visibility = Visibility.Hidden;
             _gameAndScoreboardGrid.Visibility = Visibility.Visible;
-            for (int l = 0; l < baseAIs.Count; l++)
+            Dispatcher.CurrentDispatcher.Invoke(() =>
             {
-                baseAIs[l].PlayGame(iterationList[l]);
-            }
+                foreach (GameHandler item in baseAIs)
+                {
+                    var newThread = new Thread(() => item.PlayGame());
+                    newThread.SetApartmentState(ApartmentState.STA);
+                    newThread.Start();
+                }
+            }, DispatcherPriority.ContextIdle);
         }
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;

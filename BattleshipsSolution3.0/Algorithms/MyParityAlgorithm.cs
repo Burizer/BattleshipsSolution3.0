@@ -47,10 +47,23 @@ namespace BattleshipsSolution3._0.Algorithms
                 OnPropertyChanged();
             }
         }
+        public int Counter
+        {
+            get { return _counter; }
+            set
+            {
+                _counter = value;
+                OnPropertyChanged();
+            }
+        }
         public int Coordinate
         {
             get
             {
+                if (_gridDictionary[1] == "Water")
+                {
+                    _counter = 0;
+                }
                 if (_hitList.Count != 0)
                 {
                     _hunt.GridDictionary = _gridDictionary;
@@ -61,7 +74,7 @@ namespace BattleshipsSolution3._0.Algorithms
                 else
                 {
                     string targetGrid = "";
-                    while (_counter <= 100)
+                    while (_counter < 100)
                     {
                         _counter += 2;
                         if (_counter % 20 < 11 && _counter % 20 != 0)
