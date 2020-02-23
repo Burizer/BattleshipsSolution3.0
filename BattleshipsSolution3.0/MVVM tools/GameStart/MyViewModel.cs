@@ -316,7 +316,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
                     newRect.Tag = "Water";
                     newRect.Stroke = new SolidColorBrush(Colors.Black);
                     newRect.StrokeThickness = 2;
-                    string caseString = dictionary[(x + y * 10)];
+                    string caseString = dictionary[(x + (y * 10))];
                     switch (caseString)
                     { 
                         case "Water":
