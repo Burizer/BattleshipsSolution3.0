@@ -30,7 +30,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
         private Grid _initializationGrid;
         private int _numberOfGrids;
         private List<string> _labelFillers = new List<string>() { "Algoritme: ", "Gennemsnit: ", "Minimum: ", "Maximum: ", "Total tid: ", "Tid per spil: " };
-        private AiContainer _aiContainer = new AiContainer();
+        private ObservableCollection<listOfAI> _aiList = new ObservableCollection<listOfAI>() { listOfAI.HuntAndTarget, listOfAI.MyParity, listOfAI.RandomTargeting };
         public MyViewModel()
         {
             _affixGrid = App.Current.Windows[0].FindName("MainGrid") as Grid;
@@ -55,13 +55,24 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 OnPropertyChanged();
             }
         }
-        public AiContainer AiList
+        public enum listOfAI
         {
-            get { return _aiContainer; }
-            set
+            HuntAndTarget,
+            MyParity,
+            RandomTargeting
+        }
+        public IBaseAI baseAi(listOfAI ai)
+        {
+            switch (ai)
             {
-                _aiContainer = value;
-                OnPropertyChanged();
+                case listOfAI.HuntAndTarget:
+                    return new HuntAndTargetAlgorithm();
+                case listOfAI.MyParity:
+                    return new MyParityAlgorithm();
+                case listOfAI.RandomTargeting:
+                    return new RandomTargeting();
+                default:
+                    throw new InvalidEnumArgumentException();
             }
         }
         private void AssignGrids()
@@ -145,7 +156,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 Combo.SetValue(Grid.RowProperty, 1);
                 Combo.HorizontalAlignment = HorizontalAlignment.Left;
                 Combo.VerticalAlignment = VerticalAlignment.Center;
-                Combo.ItemsSource = _aiContainer.AIList;
+                Combo.ItemsSource = _aiList;
                 Combo.SelectedItem = Combo.Items[0];
                 Label TextLabel2 = new Label();
                 TextLabel2.Content = "Vælg antal gennemkørsler.";
@@ -169,7 +180,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
             finishSetup.SetValue(Grid.RowProperty, _setupGrid.RowDefinitions.Count - 1);
             finishSetup.MouseDown += FinishSetup_ClickAsync;
             finishSetup.HorizontalAlignment = HorizontalAlignment.Left;
-            finishSetup.VerticalAlignment = VerticalAlignment.Center;
+            finishSetup.VerticalAlignment = VerticalAlignment.Top;
             Thickness finishSetupMargin = finishSetup.Margin;
             finishSetupMargin.Left = 10;
             finishSetup.Margin = finishSetupMargin;
@@ -177,7 +188,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
             _initializationGrid.Visibility = Visibility.Hidden;
             _setupGrid.Visibility = Visibility.Visible;
         }
-        private async void FinishSetup_ClickAsync(object sender, RoutedEventArgs e)
+        private void FinishSetup_ClickAsync(object sender, RoutedEventArgs e)
         {
             List<GameHandler> baseAIs = new List<GameHandler>();
             List<int> iterationList = new List<int>();
@@ -185,10 +196,11 @@ namespace BattleshipsSolution3._0.MVVM_tools
             {
                 _gameAndScoreboardGrid.RowDefinitions.Add(new RowDefinition());
                 Grid gameAndBoardGrid = new Grid();
-                gameAndBoardGrid.RowDefinitions.Add(new RowDefinition());
                 gameAndBoardGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 gameAndBoardGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 gameAndBoardGrid.SetValue(Grid.RowProperty, i);
+                gameAndBoardGrid.HorizontalAlignment = HorizontalAlignment.Left;
+                gameAndBoardGrid.VerticalAlignment = VerticalAlignment.Top;
                 Grid GameGrid = new Grid();
                 GameGrid.SetValue(Grid.ColumnProperty, 0);
                 GameGrid.Width = 300;
@@ -242,7 +254,8 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 }
                 Grid setup = _setupGrid.Children[i] as Grid;
                 ComboBox combo = setup.Children[1] as ComboBox;
-                IBaseAI gameAI = combo.SelectedItem as IBaseAI;
+                var nameOfAi = (listOfAI)combo.SelectedItem;
+                var gameAi = baseAi(nameOfAi);
                 TextBox text = setup.Children[3] as TextBox;
                 string algorithm = combo.SelectedItem.ToString();
                 int iterations;
@@ -258,33 +271,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 gameAndBoardGrid.Children.Add(GameGrid);
                 gameAndBoardGrid.Children.Add(ScoreBoard);
                 _gameAndScoreboardGrid.Children.Add(gameAndBoardGrid);
-                var newHandler = new GameHandler(gameAI, iterations);
-                var _algorithmNameBlock = VisualTreeHelper.GetChild(ScoreBoard, 1) as TextBlock;
-                string[] typeNameSplit = gameAI.GetType().ToString().Split(Convert.ToChar("."));
-                _algorithmNameBlock.Text = typeNameSplit[3];
-                var _shotsAverageBlock = VisualTreeHelper.GetChild(ScoreBoard, 3) as TextBlock;
-                Binding shotsAverageBinding = new Binding();
-                shotsAverageBinding.Source = newHandler.ShotsAverage;
-                _shotsAverageBlock.SetBinding(TextBlock.TextProperty, shotsAverageBinding);
-                var _shotsMinimumBlock = VisualTreeHelper.GetChild(ScoreBoard, 5) as TextBlock;
-                Binding shotsMinimumBinding = new Binding();
-                shotsMinimumBinding.Source = newHandler.ShotsMinimum;
-                _shotsMinimumBlock.SetBinding(TextBlock.TextProperty, shotsMinimumBinding);
-                var _shotsMaximumBlock = VisualTreeHelper.GetChild(ScoreBoard, 7) as TextBlock;
-                Binding shotsMaximumBinding = new Binding();
-                shotsMaximumBinding.Source = newHandler.ShotsMaximum;
-                _shotsMaximumBlock.SetBinding(TextBlock.TextProperty, shotsMaximumBinding);
-                var _timeElapsedBlock = VisualTreeHelper.GetChild(ScoreBoard, 9) as TextBlock;
-                Binding timeElapsedBinding = new Binding();
-                timeElapsedBinding.Source = newHandler.TimeElapsed;
-                _timeElapsedBlock.SetBinding(TextBlock.TextProperty, timeElapsedBinding);
-                var _timeAverageBlock = VisualTreeHelper.GetChild(ScoreBoard, 11) as TextBlock;
-                Binding timeAverageBinding = new Binding();
-                timeAverageBinding.Source = newHandler.TimeAverage;
-                _timeAverageBlock.SetBinding(TextBlock.TextProperty, timeAverageBinding);
-                Binding turnsBinding = new Binding();
-                turnsBinding.Source = newHandler.Turns;
-
+                var newHandler = new GameHandler(gameAi, iterations);
                 baseAIs.Add(newHandler);
             }
             _setupGrid.Visibility = Visibility.Hidden;
@@ -293,8 +280,8 @@ namespace BattleshipsSolution3._0.MVVM_tools
             var tasks = new List<Task>();
             foreach (GameHandler game in baseAIs)
             {
-                var myTask = Task.Run(() => gameGrids.Add(game.PlayGame));
-                tasks.Add(myTask);
+                Task newTask = Task.Factory.StartNew(() => gameGrids.Add(game.PlayGame));
+                tasks.Add(newTask);
             }
             Task.WaitAll(tasks.ToArray());
             for (int i = 0; i < gameGrids.Count; i++)
@@ -302,9 +289,30 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 var topGrid = _affixGrid.Children[0] as Grid;
                 var gameAndBoardGrid = topGrid.Children[i] as Grid;
                 var gameGrid = gameAndBoardGrid.Children[0] as Grid;
+                var scoreBoard = gameAndBoardGrid.Children[1] as Grid;
                 buildGrid(gameGrid, gameGrids[i]);
+                setValues(scoreBoard, baseAIs[i]);
             }
         }
+        private void setValues(Grid scoreBoard, GameHandler gameHandler)
+        {
+
+            var _algorithmBlock = VisualTreeHelper.GetChild(scoreBoard, 1) as TextBlock;
+            string algName = gameHandler.AlgorithmName;
+            int algIn = algName.LastIndexOf('.');
+            _algorithmBlock.Text = algName.Substring(algIn + 1);
+            var _shotsAverageBlock = VisualTreeHelper.GetChild(scoreBoard, 3) as TextBlock;
+            _shotsAverageBlock.Text = gameHandler.ShotsAverage.ToString();
+            var _shotsMinimumBlock = VisualTreeHelper.GetChild(scoreBoard, 5) as TextBlock;
+            _shotsMinimumBlock.Text = gameHandler.ShotsMinimum.ToString();
+            var _shotsMaximumBlock = VisualTreeHelper.GetChild(scoreBoard, 7) as TextBlock;
+            _shotsMaximumBlock.Text = gameHandler.ShotsMaximum.ToString();
+            var _timeElapsedBlock = VisualTreeHelper.GetChild(scoreBoard, 9) as TextBlock;
+            _timeElapsedBlock.Text = gameHandler.TimeElapsed;
+            var _timeAverageBlock = VisualTreeHelper.GetChild(scoreBoard, 11) as TextBlock;
+            _timeAverageBlock.Text = gameHandler.TimeAverage;
+        }
+
         private void buildGrid(Grid gameGrid, Dictionary<int, string> dictionary)
         {
             for (int y = 0; y < 10; y++)
@@ -321,7 +329,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
                     newRect.StrokeThickness = 2;
                     string caseString = dictionary[(x + (y * 10))];
                     switch (caseString)
-                    { 
+                    {
                         case "Water":
                             newRect.Fill = new SolidColorBrush(Colors.LightBlue);
                             break;

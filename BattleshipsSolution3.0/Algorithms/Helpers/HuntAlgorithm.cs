@@ -62,26 +62,22 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     string targetGridEast = "";
                     string targetGridSouth = "";
                     string targetGridWest = "";
-                    try
+                    if (currentGrid - 10 > -1)
                     {
                         targetGridNorth = _gridDictionary[currentGrid - 10];
                     }
-                    catch { }
-                    try
+                    if (currentGrid + 1 < 100)
                     {
                         targetGridEast = _gridDictionary[currentGrid + 1];
                     }
-                    catch { }
-                    try
+                    if (currentGrid + 10 < 100)
                     {
                         targetGridSouth = _gridDictionary[currentGrid + 10];
                     }
-                    catch { }
-                    try
+                    if (currentGrid - 1 > -1)
                     {
                         targetGridWest = _gridDictionary[currentGrid - 1];
                     }
-                    catch { }
                     if (targetGridNorth == "Water" || shipNames.Contains(targetGridNorth))
                     {
                         potentialHits.Add(1);
@@ -168,40 +164,26 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                     string gameGridChildWest = "";
                     string gameGridChildNorth = "";
                     string gameGridChildSouth = "";
-                    try
+                    if ((tryHorizontal[tryHorizontal.Count - 1] + 1) % 10 != 0)
                     {
-                        if ((tryHorizontal[tryHorizontal.Count - 1] + 1) % 10 != 0)
+                        gameGridChildEast = _gridDictionary[tryHorizontal[tryHorizontal.Count - 1] + 1];
+                    }
+                    if ((tryHorizontal[0] - 1) % 10 != 9 && tryHorizontal[0] - 1 > -1)
+                    {
+                        gameGridChildWest = _gridDictionary[tryHorizontal[0] - 1];
+                    }
+                    if (tryVertical.Count != 0)
+                    {
+                        if (tryVertical[0] - 10 > -1)
                         {
-                            gameGridChildEast = _gridDictionary[tryHorizontal[tryHorizontal.Count - 1] + 1];
+                            gameGridChildNorth = _gridDictionary[tryVertical[0] - 10];
+                        }
+                        if (tryVertical[tryVertical.Count - 1] + 10 < 100)
+                        {
+                            gameGridChildSouth = _gridDictionary[tryVertical[tryVertical.Count - 1] + 10];
                         }
                     }
-                    catch
-                    {
-                    }
-                    try
-                    {
-                        if ((tryHorizontal[0] - 1) % 10 != 9)
-                        {
-                            gameGridChildWest = _gridDictionary[tryHorizontal[0] - 1];
-                        }
-                    }
-                    catch
-                    {
-                    }
-                    try
-                    {
-                        gameGridChildNorth = _gridDictionary[tryVertical[0] - 10];
-                    }
-                    catch
-                    {
-                    }
-                    try
-                    {
-                        gameGridChildSouth = _gridDictionary[tryVertical[tryVertical.Count - 1] + 10];
-                    }
-                    catch
-                    {
-                    }
+
                     if (tryHorizontal.Count >= 2)
                     {
                         if ((gameGridChildEast == "Water" || shipNames.Contains(gameGridChildEast)) || (gameGridChildWest == "Water" || shipNames.Contains(gameGridChildWest)))
@@ -253,56 +235,37 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
             foreach (var item in _hitList)
             {
                 string potentialHitNorth = "";
-                try
+                if (coordinate - 10 > -1)
                 {
                     potentialHitNorth = _gridDictionary[coordinate - 10];
-                }
-                catch
-                {
                 }
                 if (potentialHitNorth == "Water" || shipNames.Contains(potentialHitNorth))
                 {
                     returnVal = coordinate - 10;
                 }
                 string potentialHitEast = "";
-                try
+                if ((coordinate + 1) % 10 != 0 && coordinate + 1 != 100)
                 {
-                    if ((coordinate + 1) % 10 != 0)
-                    {
-                        potentialHitEast = _gridDictionary[coordinate + 1];
-                    }
-                }
-                catch
-                {
+                    potentialHitEast = _gridDictionary[coordinate + 1];
                 }
                 if (potentialHitEast == "Water" || shipNames.Contains(potentialHitEast))
                 {
                     returnVal = coordinate + 1;
                 }
                 string potentialHitSouth = "";
-
-                try
+                if (coordinate + 10 < 100)
                 {
                     potentialHitSouth = _gridDictionary[coordinate + 10];
-                }
-                catch
-                {
                 }
                 if (potentialHitSouth == "Water" || shipNames.Contains(potentialHitSouth))
                 {
                     returnVal = coordinate + 10;
                 }
                 string potentialHitWest = "";
-                try
+                if ((coordinate - 1) % 10 != 9 && coordinate - 1 > -1)
                 {
-                    if ((coordinate - 1) % 10 != 9)
-                    {
-                        potentialHitWest = _gridDictionary[coordinate - 1];
-                    }
+                    potentialHitWest = _gridDictionary[coordinate - 1];
                 }
-                catch
-                {
-                }   
                 if (potentialHitWest == "Water" || shipNames.Contains(potentialHitWest))
                 {
                     returnVal = coordinate - 1;

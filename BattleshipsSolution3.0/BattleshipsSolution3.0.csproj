@@ -81,7 +81,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MVVM tools\GameStart\AiContainer.cs" />
     <Compile Include="MVVM tools\GameStart\MyViewModel.cs" />
     <Compile Include="MVVM tools\GameStart\View.xaml.cs">
       <DependentUpon>View.xaml</DependentUpon>

@@ -42,6 +42,7 @@ namespace BattleshipsSolution3._0.Classes
             _gameAi = gameAi;
             _gameAi.HitList = _hitList;
             _iterations = iterations;
+            _algorithmName = gameAi.GetType().ToString();
         }
         #endregion
         #region Properties
@@ -253,7 +254,7 @@ namespace BattleshipsSolution3._0.Classes
                 {
                     ///East
                     case 1:
-                        placeMentIndexer = 1;
+                        placeMentIndexer = 1;   
                         shipStartIndex = (_random.Next(10) * 10) + _random.Next(10 - (ship.Length - 1));
                         for (int i = 0; i < ship.Length; i++)
                         {

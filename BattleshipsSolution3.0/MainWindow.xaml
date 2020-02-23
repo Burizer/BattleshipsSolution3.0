@@ -9,8 +9,7 @@
     <ScrollViewer>
         <Grid x:Name="MainGrid">
             <Grid Name="GameAndScoreBoardGrids" Visibility="Hidden"></Grid>
-            <Grid Name="GameSetupGrids" Visibility="Hidden">
-            </Grid>
+            <Grid Name="GameSetupGrids" Visibility="Hidden"></Grid>
             <Grid Name="GameInitiationGrid"></Grid>
         </Grid>
     </ScrollViewer>
