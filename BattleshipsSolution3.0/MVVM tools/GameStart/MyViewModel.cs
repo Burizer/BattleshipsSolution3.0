@@ -289,16 +289,15 @@ namespace BattleshipsSolution3._0.MVVM_tools
             _setupGrid.Visibility = Visibility.Hidden;
             _gameAndScoreboardGrid.Visibility = Visibility.Visible;
             var gameGrids = new List<Dictionary<int, string>>();
-            var tasks = new List<Task>();
+            Task[] tasks = new Task[baseAIs.Count];
+            var taskCount = 0;
             foreach (GameHandler game in baseAIs)
             {
                 var myTask = Task.Run(() => gameGrids.Add(game.PlayGame));
-                tasks.Add(myTask);
+                tasks[taskCount] = myTask;
+                taskCount++;
             }
-            foreach (Task item in tasks)
-            {
-                item.Wait();
-            }
+            Task.WaitAll(tasks);
             for (int i = 0; i < gameGrids.Count; i++)
             {
                 var topGrid = _affixGrid.Children[i] as Grid;
