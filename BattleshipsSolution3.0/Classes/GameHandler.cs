@@ -249,19 +249,14 @@ namespace BattleshipsSolution3._0.Classes
             gameTimer = DateTime.Now;
             for (int i = 0; i < _iterations; i++)
             {
-                var newThread = new Thread(() =>
+                if (i != _iterations - 1)
                 {
-                    if (i != _iterations - 1)
-                    {
-                        Turn(i, false);
-                    }
-                    else
-                    {
-                        Turn(i, true);
-                    }
-                });
-                newThread.SetApartmentState(ApartmentState.STA);
-                newThread.Start();
+                    Turn(i, false);
+                }
+                else
+                {
+                    Turn(i, true);
+                }
             }
             TimeSpan gameEndTimer = new TimeSpan();
             gameEndTimer = DateTime.Now - gameTimer;
@@ -278,25 +273,20 @@ namespace BattleshipsSolution3._0.Classes
             _ships = new Shiplist();
             _hitCoordinateAndType = new Dictionary<int, string>();
             _gridDictionary = ResetGridDictionary;
-            if (lastIteration == true)
+            Dispatcher.CurrentDispatcher.Invoke(() =>
             {
-                Dispatcher.CurrentDispatcher.Invoke(() =>
+                if (lastIteration == true)
                 {
-                    Thread newThread = new Thread(() =>
-                    {
-                        _gameGrid.Children.Clear();
-                        PopulateGrids();
-                        PlaceShips(_ships, true);
-                    });
-                });
-            }
-            else
-            {
-                Dispatcher.CurrentDispatcher.Invoke(() =>
+                    _gameGrid.Children.Clear();
+                    PopulateGrids();
+                    PlaceShips(_ships, true);
+
+                }
+                else
                 {
                     PlaceShips(_ships, false);
-                });
-            }
+                }
+            });
 
             while (!GameWon)
             {
@@ -403,9 +393,12 @@ namespace BattleshipsSolution3._0.Classes
                 _gridDictionary[shipStartIndex + (placeMentIndexer * i)] = ship.Name;
                 if (lastIteration)
                 {
-                    Rectangle selectedGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Rectangle;
-                    selectedGrid.Tag = ship.Name;
-                    selectedGrid.Fill = new SolidColorBrush(Colors.SandyBrown);
+                    Dispatcher.CurrentDispatcher.Invoke(() =>
+                    {
+                        Rectangle selectedGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Rectangle;
+                        selectedGrid.Tag = ship.Name;
+                        selectedGrid.Fill = new SolidColorBrush(Colors.SandyBrown);
+                    });
                 }
             }
         }
@@ -418,10 +411,7 @@ namespace BattleshipsSolution3._0.Classes
             {
                 Dispatcher.CurrentDispatcher.Invoke(() =>
                 {
-                    Thread newThread = new Thread(() =>
-                    {
-                        targetGrid = _gameGrid.Children[coord] as Rectangle;
-                    });
+                    targetGrid = _gameGrid.Children[coord] as Rectangle;
                 });
             }
             if (hitGrid == "Water")
@@ -431,11 +421,8 @@ namespace BattleshipsSolution3._0.Classes
                 {
                     Dispatcher.CurrentDispatcher.Invoke(() =>
                     {
-                        Thread newThread = new Thread(() =>
-                        {
-                            targetGrid.Tag = "Miss";
-                            targetGrid.Fill = new SolidColorBrush(Colors.LightSalmon);
-                        });
+                        targetGrid.Tag = "Miss";
+                        targetGrid.Fill = new SolidColorBrush(Colors.LightSalmon);
                     });
                 }
             }
@@ -465,11 +452,8 @@ namespace BattleshipsSolution3._0.Classes
                 {
                     Dispatcher.CurrentDispatcher.Invoke(() =>
                     {
-                        Thread newThread = new Thread(() =>
-                        {
-                            targetGrid.Tag = "Hit";
-                            targetGrid.Fill = new SolidColorBrush(Colors.LightGreen);
-                        });
+                        targetGrid.Tag = "Hit";
+                        targetGrid.Fill = new SolidColorBrush(Colors.LightGreen);
                     });
                 }
             }
