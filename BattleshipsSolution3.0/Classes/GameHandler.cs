@@ -19,11 +19,9 @@ namespace BattleshipsSolution3._0.Classes
     {
         #region Instance fields
         private IBaseAI _gameAi;
-        private Grid _gameAndBoardGrid;
-        private Grid _gameGrid;
         private int _iterations;
-        private Grid _scoreGrid;
         private Shiplist _ships;
+        private Grid _gameGrid;
         private static Random _random = new Random();
         private List<int> _hitList = new List<int>();
         private Dictionary<int, string> _gridDictionary;
@@ -36,41 +34,20 @@ namespace BattleshipsSolution3._0.Classes
         private int _shotsMaximum = 0;
         private string _timeElapsed = "";
         private string _timeAverage = "";
-        private TextBlock _algorithmNameBlock;
-        private TextBlock _shotsAverageBlock;
-        private TextBlock _shotsMinimumBlock;
-        private TextBlock _shotsMaximumBlock;
-        private TextBlock _timeElapsedBlock;
-        private TextBlock _timeAverageBlock;
+        private string _turns = "";
         #endregion
         #region Constructor
-        public GameHandler(IBaseAI gameAi, Grid gameAndBoardGrid, int iterations)
+        public GameHandler(IBaseAI gameAi, int iterations)
         {
             _gameAi = gameAi;
-            _gameAndBoardGrid = gameAndBoardGrid;
             _gameAi.HitList = _hitList;
             _iterations = iterations;
-            _gameGrid = VisualTreeHelper.GetChild(_gameAndBoardGrid, 0) as Grid;
-            _scoreGrid = VisualTreeHelper.GetChild(_gameAndBoardGrid, 1) as Grid;
-            SetScoreBoardControls();
         }
         #endregion
         #region Properties
         public IBaseAI GameAi
         {
             get { return _gameAi; }
-        }
-        public Grid GameAndBoardGrid
-        {
-            get { return _gameAndBoardGrid; }
-            set
-            {
-                if (value != _gameAndBoardGrid)
-                {
-                    _gameAndBoardGrid = value;
-                    OnPropertyChanged();
-                }
-            }
         }
         public int Iterations
         {
@@ -80,19 +57,6 @@ namespace BattleshipsSolution3._0.Classes
                 _iterations = value;
                 OnPropertyChanged();
             }
-        }
-        public Grid GameGrid
-        {
-            get { return _gameGrid; }
-            set
-            {
-                _gameGrid = value;
-                OnPropertyChanged();
-            }
-        }
-        public Grid ScoreGrid
-        {
-            get { return _scoreGrid; }
         }
         public Shiplist ShipList
         {
@@ -166,6 +130,15 @@ namespace BattleshipsSolution3._0.Classes
                 OnPropertyChanged();
             }
         }
+        public string Turns
+        {
+            get { return _turns; }
+            set
+            {
+                _turns = value;
+                OnPropertyChanged();
+            }
+        }
         public bool GameWon
         {
             get
@@ -187,85 +160,41 @@ namespace BattleshipsSolution3._0.Classes
                 return dict;
             }
         }
-        private void PopulateGrids()
-        {
-            for (int y = 0; y < 10; y++)
-            {
-                for (int x = 0; x < 10; x++)
-                {
-                    Rectangle newRect = new Rectangle();
-                    newRect.SetValue(Grid.RowProperty, y);
-                    newRect.SetValue(Grid.ColumnProperty, x);
-                    newRect.Width = 30;
-                    newRect.Height = 30;
-                    newRect.Tag = "Water";
-                    newRect.Fill = new SolidColorBrush(Colors.AliceBlue);
-                    newRect.Stroke = new SolidColorBrush(Colors.Black);
-                    newRect.StrokeThickness = 2;
-                    _gameGrid.Children.Add(newRect);
-                }
-            }
-        }
-        private void SetScoreBoardControls()
-        {
-
-            _algorithmNameBlock = VisualTreeHelper.GetChild(_scoreGrid, 1) as TextBlock;
-            Binding algBinding = new Binding();
-            algBinding.Source = AlgorithmName;
-            _algorithmNameBlock.SetBinding(TextBlock.TextProperty, algBinding);
-            string[] typeNameSplit = _gameAi.GetType().ToString().Split(Convert.ToChar("."));
-            AlgorithmName = typeNameSplit[3];
-            _shotsAverageBlock = VisualTreeHelper.GetChild(_scoreGrid, 3) as TextBlock;
-            Binding shotsAverageBinding = new Binding();
-            shotsAverageBinding.Source = ShotsAverage;
-            _shotsAverageBlock.SetBinding(TextBlock.TextProperty, shotsAverageBinding);
-            _shotsMinimumBlock = VisualTreeHelper.GetChild(_scoreGrid, 5) as TextBlock;
-            Binding shotsMinimumBinding = new Binding();
-            shotsMinimumBinding.Source = ShotsMinimum;
-            _shotsMinimumBlock.SetBinding(TextBlock.TextProperty, shotsMinimumBinding);
-            _shotsMaximumBlock = VisualTreeHelper.GetChild(_scoreGrid, 7) as TextBlock;
-            Binding shotsMaximumBinding = new Binding();
-            shotsMaximumBinding.Source = ShotsMaximum;
-            _shotsMaximumBlock.SetBinding(TextBlock.TextProperty, shotsMaximumBinding);
-            _timeElapsedBlock = VisualTreeHelper.GetChild(_scoreGrid, 9) as TextBlock;
-            Binding timeElapsedBinding = new Binding();
-            timeElapsedBinding.Source = TimeElapsed;
-            _timeElapsedBlock.SetBinding(TextBlock.TextProperty, timeElapsedBinding);
-            _timeAverageBlock = VisualTreeHelper.GetChild(_scoreGrid, 11) as TextBlock;
-            Binding timeAverageBinding = new Binding();
-            timeAverageBinding.Source = TimeAverage;
-            _timeAverageBlock.SetBinding(TextBlock.TextProperty, timeAverageBinding);
-
-        }
+        
 
         //private void GameGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         //{
         //    Grid targetGrid = sender as Grid;
         //    CheckHit(-1);
         //}
-        public void PlayGame()
+        public Dictionary<int, string> PlayGame
         {
-            DateTime gameTimer = new DateTime();
-            gameTimer = DateTime.Now;
-            for (int i = 0; i < _iterations; i++)
+            get
             {
-                if (i != _iterations - 1)
+                DateTime gameTimer = new DateTime();
+                gameTimer = DateTime.Now;
+                for (int i = 0; i < _iterations; i++)
                 {
-                    Turn(i, false);
+                    if (i != _iterations - 1)
+                    {
+                        Turn(i, false);
+                    }
+                    else
+                    {
+                        Turn(i, true);
+                    }
+                    Turns = "Gennemkørsler: " + (i + 1).ToString();
                 }
-                else
-                {
-                    Turn(i, true);
-                }
+                TimeSpan gameEndTimer = new TimeSpan();
+                gameEndTimer = DateTime.Now - gameTimer;
+                _timeElapsed = gameEndTimer.ToString();
+                long averageTime = gameEndTimer.Ticks / _iterations;
+                TimeSpan averageSpan = TimeSpan.FromTicks(averageTime);
+                _timeAverage = averageSpan.ToString();
+                TimeElapsed = _timeElapsed;
+                TimeAverage = _timeAverage;
+                return _gridDictionary;
             }
-            TimeSpan gameEndTimer = new TimeSpan();
-            gameEndTimer = DateTime.Now - gameTimer;
-            _timeElapsed = gameEndTimer.ToString();
-            long averageTime = gameEndTimer.Ticks / _iterations;
-            TimeSpan averageSpan = TimeSpan.FromTicks(averageTime);
-            _timeAverage = averageSpan.ToString();
-            TimeElapsed = _timeElapsed;
-            TimeAverage = _timeAverage;
         }
         private void Turn(int loopVar, bool lastIteration)
         {
@@ -277,10 +206,7 @@ namespace BattleshipsSolution3._0.Classes
             {
                 if (lastIteration == true)
                 {
-                    _gameGrid.Children.Clear();
-                    PopulateGrids();
                     PlaceShips(_ships, true);
-
                 }
                 else
                 {
@@ -391,40 +317,15 @@ namespace BattleshipsSolution3._0.Classes
             for (int i = 0; i < ship.Length; i++)
             {
                 _gridDictionary[shipStartIndex + (placeMentIndexer * i)] = ship.Name;
-                if (lastIteration)
-                {
-                    Dispatcher.CurrentDispatcher.Invoke(() =>
-                    {
-                        Rectangle selectedGrid = VisualTreeHelper.GetChild(_gameGrid, shipStartIndex + (placeMentIndexer * i)) as Rectangle;
-                        selectedGrid.Tag = ship.Name;
-                        selectedGrid.Fill = new SolidColorBrush(Colors.SandyBrown);
-                    });
-                }
             }
         }
         public void CheckHit(int coord, bool lastIteration)
         {
             bool shipIsSunk = false;
             string hitGrid = _gridDictionary[coord];
-            var targetGrid = new Rectangle();
-            if (lastIteration)
-            {
-                Dispatcher.CurrentDispatcher.Invoke(() =>
-                {
-                    targetGrid = _gameGrid.Children[coord] as Rectangle;
-                });
-            }
             if (hitGrid == "Water")
             {
                 _gridDictionary[coord] = "Miss";
-                if (lastIteration)
-                {
-                    Dispatcher.CurrentDispatcher.Invoke(() =>
-                    {
-                        targetGrid.Tag = "Miss";
-                        targetGrid.Fill = new SolidColorBrush(Colors.LightSalmon);
-                    });
-                }
             }
             else
             {
@@ -448,14 +349,6 @@ namespace BattleshipsSolution3._0.Classes
 
                 }
                 _gridDictionary[coord] = "Hit";
-                if (lastIteration)
-                {
-                    Dispatcher.CurrentDispatcher.Invoke(() =>
-                    {
-                        targetGrid.Tag = "Hit";
-                        targetGrid.Fill = new SolidColorBrush(Colors.LightGreen);
-                    });
-                }
             }
         }
         #endregion

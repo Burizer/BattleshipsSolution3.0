@@ -167,7 +167,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
             Button finishSetup = new Button();
             finishSetup.Content = "Start alle spil!";
             finishSetup.SetValue(Grid.RowProperty, _setupGrid.RowDefinitions.Count - 1);
-            finishSetup.MouseDown += FinishSetup_Click;
+            finishSetup.MouseDown += FinishSetup_ClickAsync;
             finishSetup.HorizontalAlignment = HorizontalAlignment.Left;
             finishSetup.VerticalAlignment = VerticalAlignment.Center;
             Thickness finishSetupMargin = finishSetup.Margin;
@@ -177,7 +177,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
             _initializationGrid.Visibility = Visibility.Hidden;
             _setupGrid.Visibility = Visibility.Visible;
         }
-        private void FinishSetup_Click(object sender, RoutedEventArgs e)
+        private async void FinishSetup_ClickAsync(object sender, RoutedEventArgs e)
         {
             List<GameHandler> baseAIs = new List<GameHandler>();
             List<int> iterationList = new List<int>();
@@ -204,6 +204,7 @@ namespace BattleshipsSolution3._0.MVVM_tools
                     ColumnDefinition newColumn = new ColumnDefinition();
                     GameGrid.ColumnDefinitions.Add(newColumn);
                 }
+                GameGrid.Children.Add(new TextBlock());
                 Grid ScoreBoard = new Grid();
                 ScoreBoard.SetValue(Grid.RowProperty, i);
                 ScoreBoard.SetValue(Grid.ColumnProperty, 1);
@@ -256,16 +257,82 @@ namespace BattleshipsSolution3._0.MVVM_tools
                 gameAndBoardGrid.Children.Add(GameGrid);
                 gameAndBoardGrid.Children.Add(ScoreBoard);
                 _gameAndScoreboardGrid.Children.Add(gameAndBoardGrid);
-                baseAIs.Add(new GameHandler(gameAI, gameAndBoardGrid, iterations));
+                var newHandler = new GameHandler(gameAI, iterations);
+                var _algorithmNameBlock = VisualTreeHelper.GetChild(ScoreBoard, 1) as TextBlock;
+                string[] typeNameSplit = gameAI.GetType().ToString().Split(Convert.ToChar("."));
+                _algorithmNameBlock.Text = typeNameSplit[3];
+                var _shotsAverageBlock = VisualTreeHelper.GetChild(ScoreBoard, 3) as TextBlock;
+                Binding shotsAverageBinding = new Binding();
+                shotsAverageBinding.Source = newHandler.ShotsAverage;
+                _shotsAverageBlock.SetBinding(TextBlock.TextProperty, shotsAverageBinding);
+                var _shotsMinimumBlock = VisualTreeHelper.GetChild(ScoreBoard, 5) as TextBlock;
+                Binding shotsMinimumBinding = new Binding();
+                shotsMinimumBinding.Source = newHandler.ShotsMinimum;
+                _shotsMinimumBlock.SetBinding(TextBlock.TextProperty, shotsMinimumBinding);
+                var _shotsMaximumBlock = VisualTreeHelper.GetChild(ScoreBoard, 7) as TextBlock;
+                Binding shotsMaximumBinding = new Binding();
+                shotsMaximumBinding.Source = newHandler.ShotsMaximum;
+                _shotsMaximumBlock.SetBinding(TextBlock.TextProperty, shotsMaximumBinding);
+                var _timeElapsedBlock = VisualTreeHelper.GetChild(ScoreBoard, 9) as TextBlock;
+                Binding timeElapsedBinding = new Binding();
+                timeElapsedBinding.Source = newHandler.TimeElapsed;
+                _timeElapsedBlock.SetBinding(TextBlock.TextProperty, timeElapsedBinding);
+                var _timeAverageBlock = VisualTreeHelper.GetChild(ScoreBoard, 11) as TextBlock;
+                Binding timeAverageBinding = new Binding();
+                timeAverageBinding.Source = newHandler.TimeAverage;
+                _timeAverageBlock.SetBinding(TextBlock.TextProperty, timeAverageBinding);
+                Binding turnsBinding = new Binding();
+                turnsBinding.Source = newHandler.Turns;
+
+                baseAIs.Add(newHandler);
             }
             _setupGrid.Visibility = Visibility.Hidden;
             _gameAndScoreboardGrid.Visibility = Visibility.Visible;
-            Parallel.ForEach(baseAIs, (game) =>
+            var gameGrids = new List<Dictionary<int, string>>();
+            foreach (GameHandler game in baseAIs)
             {
-                var newThread = new Thread(() => game.PlayGame());
-                newThread.SetApartmentState(ApartmentState.STA);
-                newThread.Start();
-            });
+                await Task.Run(() => gameGrids.Add(game.PlayGame));
+            }
+            for (int i = 0; i < gameGrids.Count; i++)
+            {
+                var topGrid = _affixGrid.Children[i] as Grid;
+                var gameGrid = topGrid.Children[0] as Grid;
+                gameGrid = buildGrid(gameGrids[i]);
+            }
+        }
+        private Grid buildGrid(Dictionary<int, string> dictionary)
+        {
+            var gameGrid = new Grid();
+            gameGrid.SetValue(Grid.ColumnProperty, 0);
+            for (int y = 0; y < 10; y++)
+            {
+                for (int x = 0; x < 10; x++)
+                {
+                    Rectangle newRect = new Rectangle();
+                    newRect.SetValue(Grid.RowProperty, y);
+                    newRect.SetValue(Grid.ColumnProperty, x);
+                    newRect.Width = 30;
+                    newRect.Height = 30;
+                    newRect.Tag = "Water";
+                    newRect.Stroke = new SolidColorBrush(Colors.Black);
+                    newRect.StrokeThickness = 2;
+                    string caseString = dictionary[(x + y * 10)];
+                    switch (caseString)
+                    { 
+                        case "Water":
+                            newRect.Fill = new SolidColorBrush(Colors.LightBlue);
+                            break;
+                        case "Hit":
+                            newRect.Fill = new SolidColorBrush(Colors.Green);
+                            break;
+                        case "Miss":
+                            newRect.Fill = new SolidColorBrush(Colors.Red);
+                            break;
+                    }
+                    gameGrid.Children.Add(newRect);
+                }
+            }
+            return gameGrid;
         }
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
