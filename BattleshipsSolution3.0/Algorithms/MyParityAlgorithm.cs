@@ -19,7 +19,6 @@ namespace BattleshipsSolution3._0.Algorithms
         private List<int> _hitList = new List<int>();
         private Dictionary<int, string> _gridDictionary;
         private HuntAlgorithm _hunt = new HuntAlgorithm();
-        private Random _random = new Random();
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
         #endregion
         #region Constructor
@@ -95,7 +94,7 @@ namespace BattleshipsSolution3._0.Algorithms
                     targetGrid = "";
                     while (!viableHit)
                     {
-                        target = _random.Next(0, 100);
+                        target = StaticRandom.Rand(100);
                         try
                         {
                             targetGrid = _gridDictionary[target];

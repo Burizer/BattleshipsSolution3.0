@@ -13,7 +13,6 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
     public class HuntAlgorithm
     {
         #region Instance fields
-        private Random _random = new Random();
         private List<int> _hitList;
         private Dictionary<int, string> _gridDictionary;
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
@@ -103,7 +102,7 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                         }
                         else
                         {
-                            direction = potentialHits[_random.Next(potentialHits.Count)];
+                            direction = potentialHits[StaticRandom.Rand(potentialHits.Count)];
                         }
                         switch (direction)
                         {
@@ -124,11 +123,20 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                 {
                     List<int> tryVertical = new List<int>();
                     List<int> tryHorizontal = new List<int>();
+                    int previousVal = -1;
                     foreach (int val in _hitList)
                     {
                         if (val % 10 == _hitList[0] % 10)
                         {
-                            tryVertical.Add(val);
+                            if (previousVal == -1 || previousVal + 11 > val)
+                            {
+                                previousVal = val;
+                                tryVertical.Add(val);
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
                     }
                     if (tryVertical.Count == 1)
@@ -183,7 +191,6 @@ namespace BattleshipsSolution3._0.Algorithms.Helpers
                             gameGridChildSouth = _gridDictionary[tryVertical[tryVertical.Count - 1] + 10];
                         }
                     }
-
                     if (tryHorizontal.Count >= 2)
                     {
                         if ((gameGridChildEast == "Water" || shipNames.Contains(gameGridChildEast)) || (gameGridChildWest == "Water" || shipNames.Contains(gameGridChildWest)))

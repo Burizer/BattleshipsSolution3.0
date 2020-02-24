@@ -1,4 +1,5 @@
-﻿using BattleshipsSolution3._0.Interfaces;
+﻿using BattleshipsSolution3._0.Algorithms.Helpers;
+using BattleshipsSolution3._0.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,7 +22,6 @@ namespace BattleshipsSolution3._0.Classes
         private IBaseAI _gameAi;
         private int _iterations;
         private Shiplist _ships;
-        private static Random _random = new Random();
         private List<int> _hitList = new List<int>();
         private Dictionary<int, string> _gridDictionary;
         private Dictionary<int, string> _hitCoordinateAndType;
@@ -73,6 +73,15 @@ namespace BattleshipsSolution3._0.Classes
             set
             {
                 _hitList = value;
+                OnPropertyChanged();
+            }
+        }
+        public Dictionary<int, string> GridDictionary
+        {
+            get { return _gridDictionary; }
+            set
+            {
+                _gridDictionary = value;
                 OnPropertyChanged();
             }
         }
@@ -206,8 +215,8 @@ namespace BattleshipsSolution3._0.Classes
 
             while (!GameWon)
             {
-                _gameAi.GridDictionary = _gridDictionary;
-                _gameAi.HitList = _hitList;
+                _gameAi.GridDictionary = GridDictionary;
+                _gameAi.HitList = HitList;
                 int checkHitValue = _gameAi.Coordinate;
                 CheckHit(checkHitValue, lastIteration);
                 shotsFired++;
@@ -239,13 +248,13 @@ namespace BattleshipsSolution3._0.Classes
             while (!placementValid)
             {
                 int squaresValidated = 0;
-                int direction = _random.Next(1, 3);
+                int direction = StaticRandom.RandTwo(1, 3);
                 switch (direction)
                 {
                     ///East
                     case 1:
                         placeMentIndexer = 1;
-                        shipStartIndex = (_random.Next(10) * 10) + _random.Next(10 - (ship.Length - 1));
+                        shipStartIndex = (StaticRandom.Rand(10) * 10) + StaticRandom.Rand(10 - (ship.Length - 1));
                         for (int i = 0; i < ship.Length; i++)
                         {
                             string shipLengthGrid = "";
@@ -276,7 +285,7 @@ namespace BattleshipsSolution3._0.Classes
                     ///South
                     case 2:
                         placeMentIndexer = 10;
-                        shipStartIndex = (_random.Next(10 - (ship.Length - 1)) * 10) + _random.Next(10);
+                        shipStartIndex = (StaticRandom.Rand(10 - (ship.Length - 1)) * 10) + StaticRandom.Rand(10);
                         for (int i = 0; i < ship.Length; i++)
                         {
                             string shipLengthGrid = "";
@@ -317,6 +326,10 @@ namespace BattleshipsSolution3._0.Classes
             if (hitGrid == "Water")
             {
                 _gridDictionary[coord] = "Miss";
+            }
+            else if (hitGrid == "Miss")
+            {
+                return;
             }
             else
             {

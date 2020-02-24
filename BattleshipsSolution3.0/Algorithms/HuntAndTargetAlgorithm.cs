@@ -16,7 +16,6 @@ namespace BattleshipsSolution3._0.Algorithms
         #region Instance fields
         private List<int> _hitList = new List<int>();
         private Dictionary<int, string> _gridDictionary;
-        private static Random _random = new Random();
         private HuntAlgorithm _hunt = new HuntAlgorithm(); 
         private List<string> shipNames = new List<string>() { "Destroyer", "Submarine", "Cruiser", "Battleship", "Carrier" };
         #endregion
@@ -30,25 +29,21 @@ namespace BattleshipsSolution3._0.Algorithms
         {
             get
             {
-                bool viableHit = false;
-                int randomHit = -1;
-
                 if (_hitList.Count != 0)
                 {
-                    _hunt.GridDictionary = _gridDictionary;
-                    _hunt.HitList = _hitList;
+                    _hunt.GridDictionary = GridDictionary;
+                    _hunt.HitList = HitList;
                     return _hunt.Coordinate;
                 }
-                while (!viableHit)
+                while (true)
                 {
-                    randomHit = _random.Next(0, 100);
+                    int randomHit = StaticRandom.Rand(100);
 
                     if (_gridDictionary[randomHit] == "Water" || shipNames.Contains(_gridDictionary[randomHit]))
                     {
-                        viableHit = true;
+                        return randomHit;
                     }
                 }
-                return randomHit;
             }
         }
 
