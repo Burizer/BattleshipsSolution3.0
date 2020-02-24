@@ -80,6 +80,10 @@ namespace BattleshipsSolution3._0.Algorithms
             }
         }
         #endregion
+        public void GameFinished()
+        {
+
+        }
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
 

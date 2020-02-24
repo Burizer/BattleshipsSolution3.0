@@ -60,10 +60,6 @@ namespace BattleshipsSolution3._0.Algorithms
         {
             get
             {
-                if (_gridDictionary[1] == "Water")
-                {
-                    _counter = 0;
-                }
                 if (_hitList.Count != 0)
                 {
                     _hunt.GridDictionary = _gridDictionary;
@@ -130,6 +126,10 @@ namespace BattleshipsSolution3._0.Algorithms
             }
         }
         #endregion
+        public void GameFinished()
+        {
+            _counter = 0;
+        }
         #region OnPropertyChanged code
         public event PropertyChangedEventHandler PropertyChanged;
 

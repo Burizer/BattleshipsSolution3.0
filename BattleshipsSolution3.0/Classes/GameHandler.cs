@@ -21,7 +21,6 @@ namespace BattleshipsSolution3._0.Classes
         private IBaseAI _gameAi;
         private int _iterations;
         private Shiplist _ships;
-        private Grid _gameGrid;
         private static Random _random = new Random();
         private List<int> _hitList = new List<int>();
         private Dictionary<int, string> _gridDictionary;
@@ -161,13 +160,6 @@ namespace BattleshipsSolution3._0.Classes
                 return dict;
             }
         }
-        
-
-        //private void GameGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        //{
-        //    Grid targetGrid = sender as Grid;
-        //    CheckHit(-1);
-        //}
         public Dictionary<int, string> PlayGame
         {
             get
@@ -203,17 +195,14 @@ namespace BattleshipsSolution3._0.Classes
             _ships = new Shiplist();
             _hitCoordinateAndType = new Dictionary<int, string>();
             _gridDictionary = ResetGridDictionary;
-            Dispatcher.CurrentDispatcher.Invoke(() =>
+            if (lastIteration == true)
             {
-                if (lastIteration == true)
-                {
-                    PlaceShips(_ships, true);
-                }
-                else
-                {
-                    PlaceShips(_ships, false);
-                }
-            });
+                PlaceShips(_ships, true);
+            }
+            else
+            {
+                PlaceShips(_ships, false);
+            }
 
             while (!GameWon)
             {
@@ -223,6 +212,7 @@ namespace BattleshipsSolution3._0.Classes
                 CheckHit(checkHitValue, lastIteration);
                 shotsFired++;
             }
+            _gameAi.GameFinished();
             _totalShots.Add(shotsFired);
             ShotsAverage = _totalShots.Sum() / _totalShots.Count;
             if (loopVar == 0 || shotsFired < _shotsMinimum)
@@ -254,7 +244,7 @@ namespace BattleshipsSolution3._0.Classes
                 {
                     ///East
                     case 1:
-                        placeMentIndexer = 1;   
+                        placeMentIndexer = 1;
                         shipStartIndex = (_random.Next(10) * 10) + _random.Next(10 - (ship.Length - 1));
                         for (int i = 0; i < ship.Length; i++)
                         {
